@@ -36,7 +36,7 @@ func Init(ctx context.Context) {
 	SetGFMode(ctx)
 
 	// 设置服务日志处理
-	glog.SetDefaultHandler(LoggingServeLogHandler)
+	glog.SetDefaultHandler(glog.HandlerJson)
 
 	// 默认上海时区
 	if err := gtime.SetTimeZone("Asia/Shanghai"); err != nil {

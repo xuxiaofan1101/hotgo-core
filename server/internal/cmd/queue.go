@@ -8,7 +8,7 @@ package cmd
 import (
 	"context"
 	"github.com/gogf/gf/v2/os/gcmd"
-	"hotgo/internal/global"
+	"github.com/gogf/gf/v2/os/glog"
 	"hotgo/internal/library/queue"
 	_ "hotgo/internal/queues"
 	"hotgo/utility/simple"
@@ -21,7 +21,7 @@ var (
 		Description: ``,
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			// 服务日志处理
-			queue.Logger().SetHandlers(global.LoggingServeLogHandler)
+			queue.Logger().SetHandlers(glog.HandlerJson)
 
 			simple.SafeGo(ctx, func(ctx context.Context) {
 				queue.Logger().Debug(ctx, "start queue consumer..")

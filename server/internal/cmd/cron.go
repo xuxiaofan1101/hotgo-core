@@ -8,8 +8,8 @@ package cmd
 import (
 	"context"
 	"github.com/gogf/gf/v2/os/gcmd"
+	"github.com/gogf/gf/v2/os/glog"
 	_ "hotgo/internal/crons"
-	"hotgo/internal/global"
 	"hotgo/internal/library/cron"
 	"hotgo/internal/service"
 )
@@ -21,7 +21,7 @@ var (
 		Description: ``,
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			// 服务日志处理
-			cron.Logger().SetHandlers(global.LoggingServeLogHandler)
+			cron.Logger().SetHandlers(glog.HandlerJson)
 
 			// 启动定时任务
 			service.SysCron().StartCron(ctx)
