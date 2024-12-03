@@ -37,6 +37,7 @@ defaultLogger: &defaultLogger
   rotateExpire: "7d"                      # 日志保留天数
   rotateBackupLimit: 2                    # 最大备份数量
   rotateBackupCompress: 2                 # 日志文件压缩级别，0-9,9最高
+  timeFormat: "2006-01-02T15:04:05Z07:00" #设置为RFC3339格式
 
 
 # gf配置，配置参考：https://goframe.org/pages/viewpage.action?pageId=44449486
