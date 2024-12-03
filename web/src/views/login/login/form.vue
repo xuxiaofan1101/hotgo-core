@@ -116,7 +116,7 @@
       <FormOther moduleKey="register" tag="注册账号" @updateActiveModule="updateActiveModule" />
     </n-space>
 
-    <DemoAccount @login="handleDemoAccountLogin" />
+    <!--    <DemoAccount @login="handleDemoAccountLogin" />-->
   </n-form>
 </template>
 

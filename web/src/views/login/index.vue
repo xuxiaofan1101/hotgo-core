@@ -59,15 +59,14 @@
 
   const containerCSS = computed(() => {
     const val = document.body.clientWidth;
-    return val <= 720
-      ? {}
-      : {
-          flex: `1`,
-          padding: `62px 12px`,
-          'max-width': `484px`,
-          'min-width': '320px',
-          margin: '0 auto',
-        };
+    return {
+      display: 'flex',
+      'justify-content': 'center', // 水平居中
+      'align-items': 'center', // 垂直居中
+      height: '100vh', // 占满整个浏览器高度
+      'flex-direction': 'column', // 垂直布局
+      margin: '0 auto',
+    };
   });
 
   function handleUpdateActiveModule(key: string) {
