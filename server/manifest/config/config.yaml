@@ -1,0 +1,11 @@
+apollo:
+  AppID: "hotgo"
+  Ip: "http://192.168.2.13:8080"
+  Cluster: "default"
+  NamespaceName: "server.yaml"
+  IsBackupConfig: true
+  BackupConfigPath: "./apollo_config"
+  Secret: ""
+  SyncServerTimeout: 5000
+  MustStart: true
+  Watch: true

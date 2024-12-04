@@ -6,6 +6,7 @@
 package main
 
 import (
+	"hotgo/common/boot"
 	_ "hotgo/internal/packed"
 
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
@@ -19,6 +20,7 @@ import (
 
 func main() {
 	var ctx = gctx.GetInitCtx()
+	boot.Boot(ctx)
 	global.Init(ctx)
 	cmd.Main.Run(ctx)
 }
