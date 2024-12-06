@@ -1,15 +1,17 @@
 package boot
 
 import (
-	"context"
 	"flag"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcfg"
+	"github.com/gogf/gf/v2/os/gctx"
 	"hotgo/common/apollo"
 )
 
-func Boot(ctx context.Context) {
+var ctx = gctx.GetInitCtx()
+
+func init() {
 	configFile := flag.String("f", "./manifest/config/config.yaml", "The config file path")
 	flag.Parse()
 	// 设置默认配置文件
