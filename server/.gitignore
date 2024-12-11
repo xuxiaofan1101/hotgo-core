@@ -14,6 +14,7 @@ cbuild
 /test/
 main
 output/
+manifest/config/config.yaml
 manifest/output/
 resource/log/
 resource/public/admin/
@@ -36,4 +37,4 @@ main.exe~
 *.lock
 /bin/package.sh
 internal/packed/packed.go
-apollo_config/
+apollo_config
