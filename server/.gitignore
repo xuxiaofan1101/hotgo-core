@@ -38,3 +38,4 @@ main.exe~
 /bin/package.sh
 internal/packed/packed.go
 apollo_config
+bin/
