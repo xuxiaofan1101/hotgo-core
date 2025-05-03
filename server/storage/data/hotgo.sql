@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `hg_admin_dept` (
 --
 
 INSERT INTO `hg_admin_dept` (`id`, `pid`, `name`, `code`, `type`, `leader`, `phone`, `email`, `level`, `tree`, `sort`, `status`, `created_at`, `updated_at`) VALUES
-(100, 0, 'hotgo', 'hotgo', 'company', 'mengshuai', '15303830571', '133814250@qq.com', 1, '', 10, 1, '2022-01-04 09:54:52', '2024-04-24 23:14:24'),
+(100, 0, 'hotgo', 'hotgo', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 1, '', 10, 1, '2022-01-04 09:54:52', '2024-04-24 23:14:24'),
 (101, 100, '深圳总公司', 'shenzhen', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 2, 'tr_100 ', 20, 1, '2022-01-04 17:54:52', '2023-08-02 14:03:23'),
 (102, 100, '租户', 'tenant', 'tenant', 'hotgo', '15888888888', 'hotgo@qq.com', 2, 'tr_100 ', 1000, 1, '2022-01-04 01:54:52', '2024-04-13 22:24:58'),
 (103, 101, '研发部门', 'science', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_101 ', 40, 1, '2022-01-04 17:54:52', '2024-04-12 09:29:37'),
@@ -1340,7 +1340,7 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (14, 'smtp', 'SMTP用户名', 'string', 'smtpUser', 'ali@mail.qvnidaye.com', '', 110, '填写完整用户名', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (15, 'smtp', 'SMTP密码', 'string', 'smtpPass', '', '', 120, '填写您的密码', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (16, 'smtp', '发件人名称', 'string', 'smtpSendName', 'HotGo', 'HotGo', 130, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
-(17, 'smtp', '管理员邮箱', 'string', 'smtpAdminMailbox', '133814250@qq.com', '133814250@qq.com', 140, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
+(17, 'smtp', '管理员邮箱', 'string', 'smtpAdminMailbox', 'hotgo@qq.com', 'hotgo@qq.com', 140, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (28, 'upload', '上传驱动', 'string', 'uploadDrive', 'local', '', 300, 'local：本地;ucloud：ucloud;腾讯云:cos', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (29, 'upload', '上传图片大小限制', 'int', 'uploadImageSize', '1', '2', 310, '单位：MB', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (30, 'upload', '上传图片类型限制', 'string', 'uploadImageType', 'jpg,jpeg,gif,npm,png,svg', 'jpg,jpeg,gif,npm,png,svg', 320, '图片上传后缀类型限制', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
@@ -5567,7 +5567,7 @@ CREATE TABLE IF NOT EXISTS `hg_sys_serve_license` (
 
 INSERT INTO `hg_sys_serve_license` (`id`, `group`, `name`, `appid`, `secret_key`, `remote_addr`, `online_limit`, `login_times`, `last_login_at`, `last_active_at`, `routes`, `allowed_ips`, `end_at`, `remark`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'cron', '定时任务', '1002', 'hotgo', '127.0.0.1:62082', 1, 193, '2024-07-21 21:46:36', '2024-07-21 21:59:08', NULL, '127.0.0.1', '2033-03-09 00:00:00', '这是默认的定时任务TCP客户端授权凭证。', 1, '2023-03-11 00:00:00', '2024-07-21 21:59:08'),
-(2, 'auth', '授权服务', 'mengshuai', '123456', '127.0.0.1:50640', 1, 3, '2023-07-26 17:05:30', '2023-07-26 17:07:01', '["ExampleRPCHelloReq", "ExampleHelloReq", "AuthSummaryReq"]', '127.0.0.1', '2033-03-09 00:00:00', '这是一个测试的授权服务，可以为第三方平台提供授权支持。', 1, '2023-03-11 00:00:00', '2023-07-26 17:07:01');
+(2, 'auth', '授权服务', 'hotgo', '123456', '127.0.0.1:50640', 1, 3, '2023-07-26 17:05:30', '2023-07-26 17:07:01', '["ExampleRPCHelloReq", "ExampleHelloReq", "AuthSummaryReq"]', '127.0.0.1', '2033-03-09 00:00:00', '这是一个测试的授权服务，可以为第三方平台提供授权支持。', 1, '2023-03-11 00:00:00', '2023-07-26 17:07:01');
 
 -- --------------------------------------------------------
 
