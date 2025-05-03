@@ -66,17 +66,6 @@ CREATE TABLE IF NOT EXISTS `hg_addon_hgexample_table` (
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='插件_案例_表格';
 
---
--- 转存表中的数据 `hg_addon_hgexample_table`
---
-
-INSERT INTO `hg_addon_hgexample_table` (`id`, `pid`, `level`, `tree`, `category_id`, `flag`, `title`, `description`, `content`, `image`, `images`, `attachfile`, `attachfiles`, `map`, `star`, `price`, `views`, `activity_at`, `start_at`, `end_at`, `switch`, `sort`, `avatar`, `sex`, `qq`, `email`, `mobile`, `hobby`, `channel`, `city_id`, `remark`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 0, 1, '', 1, '[1, 2]', '测试标题', '描述', '<p>这是内容............</p>', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqamvhlq4w3ki6bl.webp', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqap5l9brk2lkavu.jpg", "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqaqua7fw8ukbbp5.jpg"]', 'http://localhost:8000/attachment/2023-07-18/cu54ama4z54oejf5xx.mp3', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqawg96ba4cuezvv.xlsx", "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqaup19k9oznyixz.doc"]', '[{"key": "qwe", "value": "123"}, {"key": "asd", "value": "456"}]', '3.0', '88.00', 10, '2022-12-23', '2022-12-01 00:00:00', '2022-12-31 23:59:59', 1, 20, '', 15, '133814250', '133814250@qq.com', '15303830571', '[3, 2, 1]', 1, 140406, '备注！', 1, 1, 1, '2022-12-15 19:30:14', '2023-07-18 20:05:45', NULL),
-(2, 0, 1, '', 0, '[1]', '测试2', '描述', '<h2><strong>不知道写点啥！</strong></h2><p><br></p><p><img src="http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqbknawlkgdttuxl.png"></p>', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqbmxmtaq06gbnqa.jpeg', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqborf529kf4cxbm.jpeg"]', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqawg96ba4cuezvv.xlsx', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqaup19k9oznyixz.doc"]', '{}', '2.5', '10.00', 0, '2023-02-18', NULL, NULL, 2, 30, '', 0, '', '1561561@qq.com', '15303830571', '[2, 1]', 3, 140214, '', 1, 1, 1, '2023-02-06 14:17:11', '2023-11-13 17:18:18', NULL),
-(3, 1, 2, 'tr_1 ', 0, '[1]', 'AAA', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqamvhlq4w3ki6bl.webp', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqborf529kf4cxbm.jpeg"]', '', '{}', '{}', '1.0', '10.00', 0, '2023-11-13', NULL, NULL, 1, 40, '', 0, '13311', '1331@qq.cc', '15303830571', '{}', 0, 0, '', 1, 1, 1, '2023-11-13 17:34:42', '2023-11-13 17:55:26', NULL),
-(4, 1, 2, 'tr_1 ', 0, '[1]', 'BBB', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqamvhlq4w3ki6bl.webp', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqborf529kf4cxbm.jpeg"]', '', '{}', '{}', '2.5', '10.00', 0, '2023-11-13', NULL, NULL, 0, 50, '', 0, '12212', '165165@q.cc', '15303830561', '{}', 0, 0, '', 1, 1, 1, '2023-11-13 17:43:58', '2023-11-13 17:43:58', NULL),
-(5, 3, 3, 'tr_1 tr_3', 0, '[1]', 'A1', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqamvhlq4w3ki6bl.webp1', '["http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdqborf529kf4cxbm.jpeg"]', '', '{}', '{}', '1.0', '10.00', 0, '2023-11-13', NULL, NULL, 1, 60, '', 0, '10121212', '122112@qq.cc', '15303830571', '{}', 3, 0, '', 1, 1, 1, '2023-11-13 17:45:22', '2024-07-21 21:55:01', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -97,13 +86,6 @@ CREATE TABLE IF NOT EXISTS `hg_addon_hgexample_tenant_order` (
   `updated_at` datetime DEFAULT NULL COMMENT '修改时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='多租户_充值订单';
 
---
--- 转存表中的数据 `hg_addon_hgexample_tenant_order`
---
-
-INSERT INTO `hg_addon_hgexample_tenant_order` (`id`, `tenant_id`, `merchant_id`, `user_id`, `product_name`, `order_sn`, `money`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, 8, 11, 12, '羊毛混纺大衣', '20230502074731zsv1Vh', '99.90', '', 1, '2024-04-10 00:00:00', '2024-04-19 00:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -122,13 +104,6 @@ CREATE TABLE IF NOT EXISTS `hg_admin_cash` (
   `handle_at` datetime DEFAULT NULL COMMENT '处理时间',
   `created_at` datetime NOT NULL COMMENT '申请时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='管理员_提现记录表';
-
---
--- 转存表中的数据 `hg_admin_cash`
---
-
-INSERT INTO `hg_admin_cash` (`id`, `member_id`, `money`, `fee`, `last_money`, `ip`, `status`, `msg`, `handle_at`, `created_at`) VALUES
-(1, 1, '100.00', '3.00', '97.00', '127.0.0.1', 2, '', '2023-05-29 14:17:17', '2023-05-29 14:16:57');
 
 -- --------------------------------------------------------
 
@@ -153,19 +128,6 @@ CREATE TABLE IF NOT EXISTS `hg_admin_credits_log` (
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '修改时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='管理员_资产变动表';
-
---
--- 转存表中的数据 `hg_admin_credits_log`
---
-
-INSERT INTO `hg_admin_credits_log` (`id`, `member_id`, `app_id`, `addons_name`, `credit_type`, `credit_group`, `before_num`, `num`, `after_num`, `remark`, `ip`, `map_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 'admin', '', 'balance', 'apply_cash', '99391.78', '-100.00', '99291.78', '后台申请提现', '127.0.0.1', 1, 0, '2023-05-29 14:16:57', '2023-05-29 14:16:57'),
-(2, 1, 'admin', '', 'balance', 'op_incr', '99291.78', '-1.00', '99290.78', '为后台用户:8 操作增加余额:1', '127.0.0.1', 0, 0, '2023-07-06 17:17:39', '2023-07-06 17:17:39'),
-(3, 8, 'admin', '', 'balance', 'incr', '3.22', '1.00', '4.22', '后台用户:1 为你操作增加余额:1', '127.0.0.1', 0, 0, '2023-07-06 17:17:39', '2023-07-06 17:17:39'),
-(4, 1, 'admin', '', 'balance', 'op_incr', '99290.78', '-1.00', '99289.78', '为后台用户:13 操作增加余额:1', '::1', 0, 1, '2024-07-21 21:49:40', '2024-07-21 21:49:40'),
-(5, 13, 'admin', '', 'balance', 'incr', '0.00', '1.00', '1.00', '后台用户:1 为你操作增加余额:1', '::1', 0, 1, '2024-07-21 21:49:40', '2024-07-21 21:49:40'),
-(6, 1, 'admin', '', 'integral', 'op_incr', '89.00', '-1.00', '88.00', '为后台用户:12 操作增加积分:1', '::1', 0, 1, '2024-07-21 21:49:46', '2024-07-21 21:49:46'),
-(7, 12, 'admin', '', 'integral', 'incr', '0.00', '1.00', '1.00', '后台用户:1 为你操作增加积分:1', '::1', 0, 1, '2024-07-21 21:49:46', '2024-07-21 21:49:46');
 
 -- --------------------------------------------------------
 
@@ -247,14 +209,7 @@ CREATE TABLE IF NOT EXISTS `hg_admin_member` (
 --
 
 INSERT INTO `hg_admin_member` (`id`, `dept_id`, `role_id`, `real_name`, `username`, `password_hash`, `salt`, `password_reset_token`, `integral`, `balance`, `avatar`, `sex`, `qq`, `email`, `mobile`, `birthday`, `city_id`, `address`, `pid`, `level`, `tree`, `invite_code`, `cash`, `last_active_at`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, 100, 1, '孟帅', 'admin', 'a7c588fffeb2c1d99b29879d7fe97c78', '6541561', '', '88.00', '99289.78', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '133814250', '133814250@qq.com', '15303830571', '2016-04-16', 410172, '莲花街001号', 0, 1, '', '111', '{"name": "孟帅", "account": "15303830571", "payeeCode": "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8mqal5isvcb58g.jpg"}', '2024-08-27 19:02:49', NULL, 1, '2021-02-12 17:59:45', '2024-08-27 19:02:49'),
-(3, 100, 2, '测试管理员', 'test', 'a7c588fffeb2c1d99b29879d7fe97c78', '6541561', '', '0.00', '4.00', '', 1, '', 'c@qq.cc', '15303888888', '2016-04-13', 371100, '大潮街道666号', 1, 2, 'tr_1 ', '222', NULL, '2024-04-24 11:47:48', '', 1, '2022-02-11 17:59:45', '2024-04-24 11:47:48'),
-(8, 102, 200, '阿萌', 'ameng', '382df3b083a27886edb94e669a857c33', 'hfuUEb', '', '11.00', '4.22', '', 2, '', '', '', NULL, 0, '', 1, 2, 'tr_1 ', '333', NULL, '2024-04-16 18:56:00', '', 1, '2023-02-03 17:34:31', '2024-04-16 18:56:00'),
-(9, 100, 206, '黄敏', 'test_finance', '151f5f6bb8b223fc7b589a32effb6f91', 'FhShzw', '', '0.00', '0.00', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', NULL, 0, '', 1, 2, 'tr_1 ', '5jZUI3uWLfcj', NULL, NULL, '', 1, '2023-08-02 11:30:45', '2023-08-02 11:31:09'),
-(11, 111, 209, '刘芳', 'abai', '5787c7a121190011fac8376b1d3e0396', 'puUFvx', '', '0.00', '0.00', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', NULL, 0, '', 8, 3, 'tr_1 tr_8 ', 'SH5akjqInb2p', NULL, '2024-04-16 18:56:02', '', 1, '2023-08-02 14:24:50', '2024-04-16 18:56:02'),
-(12, 110, 210, '李明', 'asong', '18d1e667e2e756c03186ff6d33b18fd4', 'ONYhgf', '', '1.00', '0.00', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', NULL, 0, '', 11, 4, 'tr_1 tr_8 tr_11 ', 'pHffclXhgeg9', NULL, '2024-04-23 18:05:03', '', 1, '2023-08-02 14:50:49', '2024-07-21 21:49:46'),
-(13, 110, 210, '', 'user123', 'a67ec13a65125a6b2566c4229c6c496a', 'auQwMY', '', '0.00', '1.00', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', NULL, 0, '', 1, 2, 'tr_1 ', 'bpZPxskFMBra', NULL, '2024-04-12 11:52:31', '', 1, '2024-04-12 10:50:46', '2024-07-21 21:49:40');
-
+(1, 100, 1, 'admin', 'admin', 'a7c588fffeb2c1d99b29879d7fe97c78', '6541561', '', '88.00', '99289.78', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '133814250', '133814250@qq.com', '15303830571', '2016-04-16', 410172, '莲花街001号', 0, 1, '', '111', '{"name": "孟帅", "account": "15303830571", "payeeCode": "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8mqal5isvcb58g.jpg"}', '2024-08-27 19:02:49', NULL, 1, '2021-02-12 17:59:45', '2024-08-27 19:02:49');
 -- --------------------------------------------------------
 
 --
@@ -340,7 +295,7 @@ INSERT INTO `hg_admin_menu` (`id`, `pid`, `level`, `tree`, `title`, `name`, `pat
 (2048, 2047, 2, 'tr_2047 ', '主控台', 'dashboard_console', 'console', '', 2, '', '/console/stat', '主控台', '/dashboard/console/console', 0, '', 0, 1, '', 0, 0, 0, 20, '', 1, '2023-11-13 15:16:58', '2022-07-17 11:45:09'),
 (2050, 2047, 2, 'tr_2047 ', '工作台', 'dashboard_workplace', 'workplace', '', 2, '', 'dashboard_workplace', '工作台', '/dashboard/workplace/workplace', 0, '', 0, 1, '', 0, 0, 0, 40, '', 1, '2023-11-13 15:16:58', '2022-07-17 11:45:09'),
 (2061, 0, 1, '', '组织管理', 'Org', '/org', 'AppstoreOutlined', 1, '/org/user', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 20, '', 1, '2023-11-13 15:16:58', '2022-09-16 06:08:19'),
-(2062, 2061, 2, 'tr_2061 ', '后台用户', 'user', 'user', '', 2, '', '/dept/list,/post/list,/role/list,/member/list,/dept/option', '', '/org/user/user', 0, '', 0, 0, '', 0, 0, 0, 10, '', 1, '2023-11-13 15:16:58', '2022-09-16 06:09:25'),
+(2062, 2061, 2, 'tr_2061 ', '用户管理', 'user', 'user', '', 2, '', '/dept/list,/post/list,/role/list,/member/list,/dept/option', '', '/org/user/user', 0, '', 0, 0, '', 0, 0, 0, 10, '', 1, '2023-11-13 15:16:58', '2022-09-16 06:09:25'),
 (2063, 2061, 2, 'tr_2061 ', '部门管理', 'org_dept', 'dept', '', 2, '', '', '', '/org/dept/dept', 0, '', 0, 0, '', 1, 0, 0, 20, '', 1, '2023-11-13 15:16:58', '2022-09-16 14:10:12'),
 (2064, 2061, 2, 'tr_2061 ', '岗位管理', 'org_post', 'post', '', 2, '', '/post/list', '', '/org/post/post', 0, '', 0, 0, '', 1, 0, 0, 30, '', 1, '2023-11-13 15:16:58', '2022-09-16 14:11:05'),
 (2065, 0, 1, '', '权限管理', 'Permission', '/permission', 'SafetyCertificateOutlined', 1, '/permission/menu', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 40, '', 1, '2023-11-13 15:16:58', '2022-09-15 22:08:19'),
@@ -372,7 +327,6 @@ INSERT INTO `hg_admin_menu` (`id`, `pid`, `level`, `tree`, `title`, `name`, `pat
 (2097, 0, 1, '', '开发工具', 'Develops', '/develop', 'CodeOutlined', 1, '/develop/code', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 210, '', 1, '2023-11-17 15:39:06', '2022-09-18 21:32:27'),
 (2098, 2097, 2, 'tr_2097 ', '代码生成', 'develop_code', 'code', '', 2, '', '/genCodes/list,/genCodes/selects,/genCodes/tableSelect', '', '/develop/code/index', 1, '', 0, 0, '', 0, 0, 0, 10, '', 1, '2023-11-13 15:16:58', '2022-09-18 21:32:46'),
 (2099, 2120, 2, 'tr_2120 ', 'API文档', 'apidocs', 'apidocs', '', 2, '', '', '', 'IFRAME', 2, '', 2, 1, 'https://hotgo.facms.cn/swagger', 2, 2, 2, 1000, '', 1, '2024-04-16 12:44:58', '2022-09-18 21:34:09'),
-(2100, 2120, 2, 'tr_2120 ', '使用文档', 'https://github.com/bufanyun/hotgo/tree/v2.0/docs/guide-zh-CN', '/hotgo', '', 1, '', '', '', 'LAYOUT', 0, '', 2, 2, '', 2, 2, 2, 1100, '', 1, '2024-04-16 12:45:11', '2022-09-18 21:35:17'),
 (2102, 0, 1, '', '关于', 'about', '/about', 'ProjectOutlined', 1, '/about/index', '', '', 'LAYOUT', 1, '', 1, 0, '', 0, 0, 0, 9000, '', 1, '2023-12-29 17:59:18', '2022-09-18 13:37:04'),
 (2103, 2102, 2, 'tr_2102 ', '关于详情', 'about_index', 'index', '', 2, '', '', '', '/about/index', 1, 'about', 0, 0, '', 0, 1, 0, 10, '', 1, '2023-11-13 15:16:58', '2022-09-18 13:38:00'),
 (2109, 2062, 3, 'tr_2061 tr_2062 ', '编辑用户', 'org_user_edit', '', '', 3, '', '/member/edit,/member/view', '', '/', 1, '', 0, 0, '', 0, 1, 0, 10, '', 1, '2023-11-13 15:16:58', '2022-11-22 23:49:17'),
@@ -544,16 +498,6 @@ CREATE TABLE IF NOT EXISTS `hg_admin_notice` (
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COMMENT='管理员_通知公告';
 
---
--- 转存表中的数据 `hg_admin_notice`
---
-
-INSERT INTO `hg_admin_notice` (`id`, `title`, `type`, `tag`, `content`, `receiver`, `remark`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(29, '2023年春季学期开学工作通知！', 1, 1, '1.学生：2月11日、2月12日报到，2月13日起安排考试。\n\n2.教职工：2月10日（周五）起正式上班（2月11日、2月12日正常上班）。\n\n3.校内进行的各类社会服务项目，主办部门、单位须关注参与人员的健康状况，如有异常第一时间报告。感染后仍在康复期内的师生，不参加剧烈活动。开学后两周内，原则上不组织各类竞技性较强的体育比赛等活动。\n\n4.全校师生员工要牢固树立健康第一的观念，切实增强个人责任感和防护意识，掌握防护技能，坚持戴口罩、勤洗手等良好卫生习惯，加强身体锻炼，保持健康生活方式，提升健康素养和自我防护能力，当好自身健康第一责任人。符合条件的师生，积极有序接种第二剂次加强针疫苗。', 'null', '', 10, 1, 1, 1, '2023-02-09 12:25:39', '2023-02-09 12:48:08', NULL),
-(30, '国务院办公厅关于2023年部分节假日安排的通知', 1, 3, '新华社北京12月8日电  国务院办公厅关于2023年部分节假日安排的通知，全文如下：\n\n　　各省、自治区、直辖市人民政府，国务院\n\n　　各部委、各直属机构：\n\n　　经国务院批准，现将2023年元旦、春节、清明节、劳动节、端午节、中秋节和国庆节放假调休日期的具体安排通知如下。\n\n　　一、元旦：2022年12月31日至2023年1月2日放假调休，共3天。\n\n　　二、春节：1月21日至27日放假调休，共7天。1月28日（星期六）、1月29日（星期日）上班。\n\n　　三、清明节：4月5日放假，共1天。\n\n　　四、劳动节：4月29日至5月3日放假调休，共5天。4月23日（星期日）、5月6日（星期六）上班。\n\n　　五、端午节：6月22日至24日放假调休，共3天。6月25日（星期日）上班。\n\n　　六、中秋节、国庆节：9月29日至10月6日放假调休，共8天。10月7日（星期六）、10月8日（星期日）上班。\n\n　　节假日期间，各地区、各部门要妥善安排好值班和安全、保卫、疫情防控等工作，遇有重大突发事件，要按规定及时报告并妥善处置，确保人民群众祥和平安度过节日假期。', 'null', '', 20, 1, 1, 1, '2023-02-09 12:32:32', '2023-02-09 12:48:28', NULL),
-(31, 'hotgo新版本发布啦！', 2, 4, '<p><img src="http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdr8lj1mpl0eu0jpn.png"></p><h2><br></h2><h2>本次更新内容如下：</h2><h2>1. 优化角色权限</h2><h2>2. 优化代码生成</h2><h2>3. ....</h2>', 'null', '', 30, 1, 1, 0, '2023-02-09 12:45:17', '2023-02-09 12:45:17', '2023-06-09 18:04:30'),
-(32, '新的好友', 3, 5, '<p><strong>哈喽，你好呀！</strong></p>', '[1, 3, 8]', '', 40, 1, 1, 3, '2023-02-09 12:45:54', '2023-08-11 15:19:04', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -568,20 +512,6 @@ CREATE TABLE IF NOT EXISTS `hg_admin_notice_read` (
   `updated_at` datetime DEFAULT NULL COMMENT '更新时间',
   `created_at` datetime DEFAULT NULL COMMENT '阅读时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='管理员_公告已读记录';
-
---
--- 转存表中的数据 `hg_admin_notice_read`
---
-
-INSERT INTO `hg_admin_notice_read` (`id`, `notice_id`, `member_id`, `clicks`, `updated_at`, `created_at`) VALUES
-(1, 31, 1, 2, '2023-04-26 22:44:51', '2023-04-25 22:59:16'),
-(2, 30, 1, 23, '2024-07-21 10:34:04', '2023-04-25 23:01:27'),
-(3, 32, 3, 0, '2023-04-28 16:48:41', '2023-04-28 16:48:41'),
-(4, 29, 3, 4, '2023-08-11 14:42:22', '2023-04-28 16:48:47'),
-(5, 30, 3, 3, '2023-08-11 15:24:45', '2023-04-28 16:48:47'),
-(6, 29, 1, 1, '2023-08-11 16:07:58', '2023-06-09 20:26:43'),
-(7, 29, 11, 7, '2023-08-02 14:54:26', '2023-08-02 14:54:16'),
-(8, 30, 8, 0, '2023-08-02 14:59:21', '2023-08-02 14:59:21');
 
 -- --------------------------------------------------------
 
@@ -644,17 +574,6 @@ CREATE TABLE IF NOT EXISTS `hg_admin_post` (
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '更新时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='管理员_岗位';
-
---
--- 转存表中的数据 `hg_admin_post`
---
-
-INSERT INTO `hg_admin_post` (`id`, `code`, `name`, `remark`, `sort`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'ceo', '董事长', '', 1, 1, '2022-01-04 17:54:52', '2023-07-06 15:17:48'),
-(2, 'se', '项目经理', '', 2, 1, '2022-01-04 17:54:52', '2023-01-18 00:00:00'),
-(3, 'hr', '人力资源', '', 3, 1, '2022-01-04 17:54:52', '2023-02-26 00:32:40'),
-(4, 'user', '普通员工', '', 4, 1, '2022-01-04 17:54:52', '2022-05-15 22:33:09'),
-(6, 'test', '测试', '测试..', 5, 1, '2022-08-14 11:41:22', '2023-04-27 23:17:27');
 
 -- --------------------------------------------------------
 
@@ -1380,18 +1299,6 @@ CREATE TABLE IF NOT EXISTS `hg_sys_blacklist` (
   `updated_at` datetime DEFAULT NULL COMMENT '更新时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='系统_访问黑名单';
 
---
--- 转存表中的数据 `hg_sys_blacklist`
---
-
-INSERT INTO `hg_sys_blacklist` (`id`, `ip`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, '39.162.138.4', '', 2, '2022-10-01 22:02:09', '2022-10-01 22:39:23'),
-(2, '29.162.138.91', '', 2, '2022-10-01 22:02:09', '2022-10-01 22:39:23'),
-(3, '19.162.138.94', '指定IP', 1, '2022-10-01 14:02:09', '2023-01-20 23:11:43'),
-(5, '19.162.138.91,19.162.138.96', '多个IP', 1, '2022-10-01 14:02:09', '2023-01-20 23:11:36'),
-(6, '19.160.138.0/24', 'IP段', 1, '2022-10-01 14:02:09', '2023-01-20 23:11:30'),
-(7, '29.160.138.0-29.160.138.5', 'IP范围', 1, '2022-10-01 14:02:09', '2023-04-27 23:30:46');
-
 -- --------------------------------------------------------
 
 --
@@ -1770,13 +1677,6 @@ CREATE TABLE IF NOT EXISTS `hg_sys_ems_log` (
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '更新时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='系统_邮件发送记录';
-
---
--- 转存表中的数据 `hg_sys_ems_log`
---
-
-INSERT INTO `hg_sys_ems_log` (`id`, `event`, `email`, `code`, `times`, `content`, `ip`, `status`, `created_at`, `updated_at`) VALUES
-(4, 'bind', '133814250@qq.com', '8793', 1, '<!doctype html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8" />\r\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\r\n    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\r\n    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\r\n    <title>验证码邮件</title>\r\n    <style>\r\n        html,\r\n        body {\r\n            margin: 0 auto !important;\r\n            padding: 0 !important;\r\n            width: 100% !important;\r\n            font-family: sans-serif;\r\n            line-height: 1.4;\r\n            -webkit-font-smoothing: antialiased;\r\n            -ms-text-size-adjust: 100%;\r\n            -webkit-text-size-adjust: 100%;\r\n        }\r\n        * {\r\n            -ms-text-size-adjust: 100%;\r\n        }\r\n        table,\r\n        td {\r\n            mso-table-lspace: 0 !important;\r\n            mso-table-rspace: 0 !important;\r\n        }\r\n        img {\r\n            display: block;\r\n            border: none;\r\n            max-width: 100%;\r\n            -ms-interpolation-mode: bicubic;\r\n        }\r\n        a {\r\n            text-decoration: none;\r\n        }\r\n    </style>\r\n</head>\r\n<body\r\n        leftmargin="0"\r\n        marginwidth="0"\r\n        topmargin="0"\r\n        marginheight="0"\r\n        offset="0"\r\n        width="100%"\r\n        style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly"\r\n>\r\n<table\r\n        role="presentation"\r\n        align="center"\r\n        valign="top"\r\n        border="0"\r\n        cellpadding="0"\r\n        cellspacing="0"\r\n        height="100%"\r\n        width="100%"\r\n        style="border-spacing: 0;\r\n				border-collapse: collapse;\r\n				vertical-align: top;\r\n				padding: 0;\r\n				margin: 0;\r\n				width: 100%;\r\n				text-align: center;"\r\n>\r\n    <tr>\r\n        <td align="center" valign="top">\r\n            <table\r\n                    role="presentation"\r\n                    align="center"\r\n                    border="0"\r\n                    cellpadding="0"\r\n                    cellspacing="0"\r\n                    width="600"\r\n                    bgcolor="#ffffff"\r\n                    style="max-width: 600px;\r\n							border-spacing: 0;\r\n							border-collapse: collapse;\r\n							vertical-align: top;\r\n							padding: 0;\r\n							margin: 0;\r\n							width: 100%;\r\n							background: #ffffff;"\r\n            >\r\n                <tr>\r\n                    <td height=40" style="height:40px"></td>\r\n                </tr>\r\n                <tr>\r\n                    <td align="center" valign="top">\r\n                        <table\r\n                                role="presentation"\r\n                                align="center"\r\n                                border="0"\r\n                                cellpadding="0"\r\n                                cellspacing="0"\r\n                                width="440"\r\n                                style="max-width: 440px;\r\n										border-spacing: 0;\r\n										border-collapse: collapse;\r\n										vertical-align: top;\r\n										padding: 0;\r\n										margin: 0;\r\n										width: 100%;\r\n										text-align: center;"\r\n                        >\r\n                            <tr>\r\n                                <td align="center">\r\n                                    <img\r\n                                            src="https://hotgo.facms.cn/attachment/2022-10-07/cnf9tml2ikirr1i6ss.png"\r\n                                            width="170"\r\n                                            style="border: none; display: block; max-width: 170px; width: 100%"\r\n                                     alt="logo">\r\n                                </td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td height="40" style="height:40px"></td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td>\r\n                                    <h1\r\n                                            style="font-family: Arial, Helvetica, sans-serif;\r\n													font-size: 24px;\r\n													color: #010E28;\r\n													font-weight: bold;\r\n													margin: 0 0 5px;\r\n													padding: 0"\r\n                                    >\r\n                                        这是你发送的验证码吗？\r\n                                    </h1>\r\n                                </td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td height="15" style="height: 15px"></td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td>\r\n                                    <p\r\n                                            style="font-family: Arial, Helvetica, sans-serif;\r\n													font-size: 15px;\r\n													color: #5B6987;\r\n													margin: 0;\r\n													padding: 0;\r\n													line-height: 20px;"\r\n                                    >\r\n                                        Windows 10 <br />\r\n                                        保留地址 (estimated) <br />\r\n                                        IP 地址: 127**.0.1\r\n                                    </p>\r\n                                </td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td height="30" style="height: 30px"></td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td>\r\n                                    <p\r\n                                            style="font-family: Arial, Helvetica, sans-serif;\r\n													font-size: 15px;\r\n													color: #5B6987;\r\n													margin: 0;\r\n													padding: 0;\r\n													line-height: 20px;\r\n													font-weight: bold;"\r\n                                    >\r\n                                        如果是，请输入验证码:\r\n                                    </p>\r\n                                </td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td height="20" style="height: 20px"></td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td>\r\n                                    <p\r\n                                            style="font-family: Arial, Helvetica, sans-serif;\r\n													font-size: 35px;\r\n													color: #010E28;\r\n													margin: 0;\r\n													padding: 0;\r\n													line-height: 20px;\r\n													font-weight: bold;"\r\n                                    >\r\n                                        8793\r\n                                    </p>\r\n                                </td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td height="20" style="height: 20px">	</td>\r\n                            </tr>\r\n                            <tr>\r\n                                <td>\r\n                                    <p\r\n                                            style="font-family: Arial, Helvetica, sans-serif;\r\n													font-size: 15px;\r\n													color: #5B6987;\r\n													margin: 0;\r\n													padding: 0;\r\n													line-height: 20px;\r\n													font-weight: bold;"\r\n                                    >\r\n                                        该验证码10分钟内有效，请不要告诉于他人！\r\n                                    </p>\r\n                                </td>\r\n                            </tr>\r\n                        </table>\r\n\r\n                    </td>\r\n                </tr>\r\n                <tr>\r\n                    <td height="40" style="height:40px"></td>\r\n                </tr>\r\n            </table>\r\n        </td>\r\n    </tr>\r\n</table>\r\n</body>\r\n</html>', '39.165.245.100', 2, '2023-02-04 16:49:39', '2023-02-04 16:56:24');
 
 -- --------------------------------------------------------
 
@@ -5705,13 +5605,6 @@ CREATE TABLE IF NOT EXISTS `hg_sys_sms_log` (
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '更新时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='系统_短信发送记录';
-
---
--- 转存表中的数据 `hg_sys_sms_log`
---
-
-INSERT INTO `hg_sys_sms_log` (`id`, `event`, `mobile`, `code`, `times`, `ip`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'code', '1530380571', '1234', 1, '39.165.245.100', 1, '2022-12-16 16:01:30', '2022-01-24 11:33:16');
 
 -- --------------------------------------------------------
 
