@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-card :bordered="false" class="proCard" title="后台用户">
+    <n-card :bordered="false" class="proCard" title="用户管理">
       <n-tabs
         type="card"
         class="card-tabs"

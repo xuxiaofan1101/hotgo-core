@@ -157,7 +157,15 @@ CREATE TABLE IF NOT EXISTS `hg_admin_dept` (
 --
 
 INSERT INTO `hg_admin_dept` (`id`, `pid`, `name`, `code`, `type`, `leader`, `phone`, `email`, `level`, `tree`, `sort`, `status`, `created_at`, `updated_at`) VALUES
-(100, 0, 'hotgo', '0', 'company', 'admin', '', '', 1, '', 10, 1, '2022-01-04 09:54:52', '2024-04-24 23:14:24');
+(100, 0, 'hotgo', 'hotgo', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 1, '', 10, 1, '2022-01-04 09:54:52', '2024-04-24 23:14:24'),
+(101, 100, '深圳总公司', 'shenzhen', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 2, 'tr_100 ', 20, 1, '2022-01-04 17:54:52', '2023-08-02 14:03:23'),
+(102, 100, '租户', 'tenant', 'tenant', 'hotgo', '15888888888', 'hotgo@qq.com', 2, 'tr_100 ', 1000, 1, '2022-01-04 01:54:52', '2024-04-13 22:24:58'),
+(103, 101, '研发部门', 'science', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_101 ', 40, 1, '2022-01-04 17:54:52', '2024-04-12 09:29:37'),
+(105, 101, '测试部门', 'test', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_101 ', 50, 1, '2022-01-04 17:54:52', '2024-04-12 09:29:41'),
+(106, 101, '财务部门', 'finance', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_101 ', 60, 1, '2022-01-04 17:54:52', '2024-04-12 09:29:45'),
+(107, 101, '运维部门', 'maintain', 'company', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_101 ', 70, 1, '2022-01-04 09:54:52', '2024-04-12 09:29:49'),
+(110, 111, '用户', 'user', 'user', 'hotgo', '15888888888', 'hotgo@qq.com', 4, 'tr_100 tr_102 tr_111 ', 10, 1, '2024-04-12 09:18:44', '2024-04-13 22:25:07'),
+(111, 102, '商户', 'merchant', 'merchant', 'hotgo', '15888888888', 'hotgo@qq.com', 3, 'tr_100 tr_102 ', 2000, 1, '2024-04-12 09:31:58', '2024-04-14 22:00:20');
 
 -- --------------------------------------------------------
 
@@ -201,7 +209,8 @@ CREATE TABLE IF NOT EXISTS `hg_admin_member` (
 --
 
 INSERT INTO `hg_admin_member` (`id`, `dept_id`, `role_id`, `real_name`, `username`, `password_hash`, `salt`, `password_reset_token`, `integral`, `balance`, `avatar`, `sex`, `qq`, `email`, `mobile`, `birthday`, `city_id`, `address`, `pid`, `level`, `tree`, `invite_code`, `cash`, `last_active_at`, `remark`, `status`, `created_at`, `updated_at`) VALUES
-(1, 100, 1, 'admin', 'admin', '0fa54e0db538ad9f24672186e60f00a6', 'f6b38075fbcc335d', '', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', '2024-10-01', 110000, '', 0, 1, '', '', '{"name": "", "account": "", "payeeCode": "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8mqal5isvcb58g.jpg"}', '2024-08-27 19:02:49', NULL, 1, '2021-02-12 17:59:45', '2024-08-27 19:02:49');
+(1, 100, 1, 'superadmin', 'superadmin', '0fa54e0db538ad9f24672186e60f00a6', 'f6b38075fbcc335d', '', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', '2024-10-01', 110000, '', 0, 1, '', '1', '{"name": "", "account": "", "payeeCode": "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8mqal5isvcb58g.jpg"}', '2024-08-27 19:02:49', NULL, 1, '2021-02-12 17:59:45', '2024-08-27 19:02:49'),
+(2, 100, 2, 'admin', 'admin', '0fa54e0db538ad9f24672186e60f00a6', 'f6b38075fbcc335d', '', '', '', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', 1, '', '', '', '2024-10-01', 110000, '', 0, 1, '', '2', '{"name": "", "account": "", "payeeCode": "http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8mqal5isvcb58g.jpg"}', '2024-08-27 19:02:49', NULL, 1, '2021-02-12 17:59:45', '2024-08-27 19:02:49');
 -- --------------------------------------------------------
 
 --
@@ -594,8 +603,15 @@ CREATE TABLE IF NOT EXISTS `hg_admin_role` (
 --
 
 INSERT INTO `hg_admin_role` (`id`, `name`, `key`, `data_scope`, `custom_dept`, `pid`, `level`, `tree`, `remark`, `sort`, `status`, `created_at`, `updated_at`) VALUES
-(1, '超级管理员', 'super', 1, '[]', 0, 1, NULL, '超级管理员，拥有全部权限', 100, 1, '2022-01-04 17:54:52', '2023-01-12 00:00:00'),
-(2, '管理员', 'manage', 3, '[]', 1, 2, 'tr_1 ', '普通管理员，拥有常规的后台管理权限', 200, 1, '2022-01-04 17:54:52', '2023-04-27 00:00:00');
+(1, '超级管理员', 'superadmin', 1, '[]', 0, 1, NULL, '超级管理员，拥有全部权限', 100, 1, '2022-01-04 17:54:52', '2023-01-12 00:00:00'),
+(2, '管理员', 'admin', 3, '[]', 1, 2, 'tr_1 ', '普通管理员，拥有常规的后台管理权限', 200, 1, '2022-01-04 17:54:52', '2023-04-27 00:00:00'),
+(200, '租户', 'tenant', 7, '[]', 2, 3, 'tr_1 tr_2 ', '多租户系统中顶层实体客户、组织或实体', 1000, 1, '2023-01-12 00:00:00', '2023-08-11 15:55:46'),
+(206, '财务部', 'finance', 2, '[]', 2, 3, 'tr_1 tr_2 ', '', 300, 1, '2023-01-24 20:22:10', '2023-08-11 15:55:46'),
+(207, '商务部', 'business', 2, '[]', 2, 3, 'tr_1 tr_2 ', '', 400, 1, '2023-01-24 20:23:27', '2023-08-11 15:55:46'),
+(208, '技术部', 'science', 2, '[]', 2, 3, 'tr_1 tr_2 ', '', 500, 1, '2023-01-24 20:23:54', '2023-08-11 15:55:46'),
+(209, '商家', 'merchant', 7, '[]', 200, 4, 'tr_1 tr_2 tr_200 ', '租户内部实体，可独立经营但受租户的监管和管理', 2000, 1, '2024-04-12 10:14:21', '2024-04-13 22:24:31'),
+(210, '用户', 'user', 5, '[]', 209, 5, 'tr_1 tr_2 tr_200 tr_209 ', '真正使用系统产品的终端用户', 10, 1, '2024-04-12 10:18:45', '2024-04-13 22:24:40');
+
 -- --------------------------------------------------------
 
 --
@@ -1316,16 +1332,16 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (3, 'theme', '默认侧边栏风格', 'string', 'themeNavTheme', 'light', 'dark', 70, '', 1, 1, '2021-01-30 13:27:43', '2022-09-05 20:29:05'),
 (6, 'basic', '网站名称', 'string', 'basicName', 'HotGo', 'HotGo!', 10, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (7, 'basic', '网站logo', 'string', 'basicLogo', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', '', 20, '首页使用', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
-(8, 'basic', '网站备案号', 'string', 'basicIcpCode', '', '', 30, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
+(8, 'basic', '网站备案号', 'string', 'basicIcpCode', '豫ICP备16035288号', '', 30, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (9, 'basic', '网站开启访问', 'bool', 'basicSystemOpen', '1', 'true', 50, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (10, 'basic', '网站关闭提示', 'string', 'basicCloseText', '网站维护中，暂时无法访问！本网站正在进行系统维护和技术升级，网站暂时无法访问，敬请谅解！', '网站维护中，暂时无法访问！本网站正在进行系统维护和技术升级，网站暂时无法访问，敬请谅解！', 60, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:29'),
 (11, 'basic', '版权所有', 'string', 'basicCopyright', '© 2019 - 2023 HotGo All Rights Reserved.', '© 2021 - 2023 HotGo All Rights Reserved.', 40, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (12, 'smtp', 'SMTP服务器', 'string', 'smtpHost', 'smtpdm.aliyun.com', 'smtpdm.aliyun.com', 50, '错误的配置发送邮件会导致服务器超时', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (13, 'smtp', 'SMTP端口', 'int', 'smtpPort', '25', '25', 100, '(不加密默认25,SSL默认465,TLS默认587)', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
-(14, 'smtp', 'SMTP用户名', 'string', 'smtpUser', '', '', 110, '填写完整用户名', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
+(14, 'smtp', 'SMTP用户名', 'string', 'smtpUser', 'ali@mail.qvnidaye.com', '', 110, '填写完整用户名', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (15, 'smtp', 'SMTP密码', 'string', 'smtpPass', '', '', 120, '填写您的密码', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (16, 'smtp', '发件人名称', 'string', 'smtpSendName', 'HotGo', 'HotGo', 130, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
-(17, 'smtp', '管理员邮箱', 'string', 'smtpAdminMailbox', '', '', 140, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
+(17, 'smtp', '管理员邮箱', 'string', 'smtpAdminMailbox', 'hotgo@qq.com', 'hotgo@qq.com', 140, '', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (28, 'upload', '上传驱动', 'string', 'uploadDrive', 'local', '', 300, 'local：本地;ucloud：ucloud;腾讯云:cos', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (29, 'upload', '上传图片大小限制', 'int', 'uploadImageSize', '1', '2', 310, '单位：MB', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (30, 'upload', '上传图片类型限制', 'string', 'uploadImageType', 'jpg,jpeg,gif,npm,png,svg', 'jpg,jpeg,gif,npm,png,svg', 320, '图片上传后缀类型限制', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
@@ -1352,8 +1368,8 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (51, 'smtp', '最小发送间隔', 'int', 'smtpMinInterval', '60', '', 150, '同地址', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (52, 'smtp', 'IP最大发送次数', 'int', 'smtpMaxIpLimit', '10', '', 160, '同IP每天最大允许发送次数', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
 (53, 'smtp', '验证码有效期', 'int', 'smtpCodeExpire', '600', '', 170, '单位：秒', 1, 1, '2021-01-30 13:27:43', '2023-02-04 16:59:13'),
-(54, 'basic', '网站域名', 'string', 'basicDomain', 'https://hotgo.facms.cn', 'https://hotgo.facms.cn', 45, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
-(55, 'basic', 'websocket地址', 'string', 'basicWsAddr', 'wss://hotgo.facms.cn/socket', 'wss://hotgo.facms.cn/socket', 48, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
+(54, 'basic', '网站域名', 'string', 'basicDomain', 'http://127.0.0.1:8000', 'http://127.0.0.1:8000', 45, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
+(55, 'basic', 'websocket地址', 'string', 'basicWsAddr', 'ws://127.0.0.1:8000/socket', 'ws://127.0.0.1:8000/socket', 48, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (56, 'upload', 'COS存储路径', 'string', 'uploadCosPath', 'hotgo/attachment/', 'hotgo/attachment/', 450, 'COS对象存储中的相对路径', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (57, 'upload', 'COS秘钥ID', 'string', 'uploadCosSecretId', '', '', 460, '子账号密钥获取可参考 https://cloud.tencent.com/document/product/598/37140', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (58, 'upload', 'COS秘钥', 'string', 'uploadCosSecretKey', '', '', 470, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
@@ -5552,7 +5568,7 @@ CREATE TABLE IF NOT EXISTS `hg_sys_serve_license` (
 
 INSERT INTO `hg_sys_serve_license` (`id`, `group`, `name`, `appid`, `secret_key`, `remote_addr`, `online_limit`, `login_times`, `last_login_at`, `last_active_at`, `routes`, `allowed_ips`, `end_at`, `remark`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'cron', '定时任务', '1002', 'hotgo', '127.0.0.1:62082', 1, 193, '2024-07-21 21:46:36', '2024-07-21 21:59:08', NULL, '127.0.0.1', '2033-03-09 00:00:00', '这是默认的定时任务TCP客户端授权凭证。', 1, '2023-03-11 00:00:00', '2024-07-21 21:59:08'),
-(2, 'auth', '授权服务', 'mengshuai', '123456', '127.0.0.1:50640', 1, 3, '2023-07-26 17:05:30', '2023-07-26 17:07:01', '["ExampleRPCHelloReq", "ExampleHelloReq", "AuthSummaryReq"]', '127.0.0.1', '2033-03-09 00:00:00', '这是一个测试的授权服务，可以为第三方平台提供授权支持。', 1, '2023-03-11 00:00:00', '2023-07-26 17:07:01');
+(2, 'auth', '授权服务', 'hotgo', '123456', '127.0.0.1:50640', 1, 3, '2023-07-26 17:05:30', '2023-07-26 17:07:01', '["ExampleRPCHelloReq", "ExampleHelloReq", "AuthSummaryReq"]', '127.0.0.1', '2033-03-09 00:00:00', '这是一个测试的授权服务，可以为第三方平台提供授权支持。', 1, '2023-03-11 00:00:00', '2023-07-26 17:07:01');
 
 -- --------------------------------------------------------
 

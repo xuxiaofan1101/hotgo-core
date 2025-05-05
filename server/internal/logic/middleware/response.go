@@ -27,7 +27,7 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 		r.Response.Writeln("403 - 网站拒绝显示此网页")
 		return
 	case 404:
-		r.Response.Writeln("404 - 你似乎来到了没有知识存在的荒原…")
+		r.Response.ServeFile("./resource/public/admin/index.html")
 		return
 	}
 
