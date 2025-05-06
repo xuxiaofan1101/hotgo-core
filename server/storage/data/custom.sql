@@ -1,6 +1,85 @@
 ALTER TABLE `hg_admin_menu`
     MODIFY tree VARCHAR(255) NOT NULL DEFAULT '' COMMENT '关系树';
 
+ALTER TABLE `hg_addon_hgexample_table`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_addon_hgexample_tenant_order`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_cash`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_credits_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_dept`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_member`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_member_post`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_member_role`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_menu`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_notice`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_notice_read`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_oauth`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_order`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_post`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_role`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_role_casbin`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_admin_role_menu`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_pay_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_pay_refund`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_addons_config`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_addons_install`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_attachment`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_blacklist`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_config`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_cron`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_cron_group`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_dict_data`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_dict_type`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_ems_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_gen_codes`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_gen_curd_demo`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_gen_tree_demo`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_login_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_provinces`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_serve_license`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_serve_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_sys_sms_log`
+    AUTO_INCREMENT = 10000;
+ALTER TABLE `hg_test_category`
+    AUTO_INCREMENT = 10000;
+
 -- 表的结构 `hg_kafka_clusters`
 CREATE TABLE IF NOT EXISTS `hg_addon_kafka_clusters`
 (
@@ -81,3 +160,4 @@ CREATE TABLE IF NOT EXISTS `hg_addon_kafka_acls`
     `updated_at`      DATETIME     DEFAULT NULL COMMENT '更新时间',
     INDEX idx_kafka_acl (`kafka_user`, `resource_type`, `resource_name`, `operation`, `permission_type`, `host`)
 ) COMMENT ='acls';
+
