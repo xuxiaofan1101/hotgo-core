@@ -7,6 +7,7 @@ package casbin
 
 import (
 	"context"
+	"fmt"
 	"hotgo/internal/consts"
 	"hotgo/internal/dao"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+	"github.com/gogf/gf/v2/container/gvar"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/os/gres"
@@ -34,7 +36,7 @@ var Enforcer *casbin.Enforcer
 // InitEnforcer 初始化
 func InitEnforcer(ctx context.Context) {
 	var (
-		link   = g.Cfg().MustGet(ctx, "database.default.link")
+		link   = getDbLink(ctx)
 		a, err = NewAdapter(link.String())
 	)
 
@@ -69,6 +71,26 @@ func InitEnforcer(ctx context.Context) {
 	loadPermissions(ctx)
 }
 
+// GetDbLink 获取数据库链接
+func getDbLink(ctx context.Context) *gvar.Var {
+
+	link := g.Cfg().MustGet(ctx, "database.default")
+	//读写分离
+	if !link.IsSlice() {
+		return g.Cfg().MustGet(ctx, "database.default.link")
+	}
+
+	for _, v := range link.Array() {
+		// 只获取主库
+		val := v.(map[string]interface{})
+		if val["role"] == "master" {
+			return gvar.New(val["link"])
+		}
+	}
+	return gvar.New("database.default.0.link")
+
+}
+
 func loadPermissions(ctx context.Context) {
 	type Policy struct {
 		Key         string `json:"key"`
@@ -79,14 +101,18 @@ func loadPermissions(ctx context.Context) {
 		polices []*Policy
 		err     error
 	)
+	//别名拼接 r.key m.permissions
+	q := func(alias string, column string) string {
+		return fmt.Sprintf("%s.%s", alias, column)
+	}
 	err = g.Model(gstr.Join([]string{dao.AdminRole.Table(), "r"}, " ")).
 		LeftJoin(gstr.Join([]string{dao.AdminRoleMenu.Table(), "rm"}, " "), "r.id=rm.role_id").
 		LeftJoin(gstr.Join([]string{dao.AdminMenu.Table(), "m"}, " "), "rm.menu_id=m.id").
-		Fields("r.key,m.permissions").
-		Where("r.status", consts.StatusEnabled).
-		Where("m.status", consts.StatusEnabled).
-		Where("m.permissions !=?", "").
-		Where("r.key !=?", consts.SuperRoleKey).
+		Fields(q("r", dao.AdminRole.Columns().Key), q("m", dao.AdminMenu.Columns().Permissions)).
+		Where(q("r", dao.AdminRole.Columns().Status), consts.StatusEnabled).
+		Where(q("m", dao.AdminMenu.Columns().Status), consts.StatusEnabled).
+		WhereNot(q("m", dao.AdminMenu.Columns().Permissions), "").
+		WhereNot(q("r", dao.AdminRole.Columns().Key), consts.SuperRoleKey).
 		Scan(&polices)
 	if err != nil {
 		g.Log().Fatalf(ctx, "loadPermissions Scan err:%v", err)

@@ -1331,7 +1331,7 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (2, 'theme', '默认系统主题', 'string', 'themeAppTheme', '#2d8cf0', '#2d8cf0', 60, '', 1, 1, '2021-01-30 13:27:43', '2022-09-05 20:29:05'),
 (3, 'theme', '默认侧边栏风格', 'string', 'themeNavTheme', 'light', 'dark', 70, '', 1, 1, '2021-01-30 13:27:43', '2022-09-05 20:29:05'),
 (6, 'basic', '网站名称', 'string', 'basicName', 'HotGo', 'HotGo!', 10, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
-(7, 'basic', '网站logo', 'string', 'basicLogo', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', '', 20, '首页使用', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
+(7, 'basic', '网站logo', 'string', 'basicLogo', 'https://gmycos.facms.cn/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', '', 20, '首页使用', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (8, 'basic', '网站备案号', 'string', 'basicIcpCode', '豫ICP备16035288号', '', 30, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (9, 'basic', '网站开启访问', 'bool', 'basicSystemOpen', '1', 'true', 50, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:30'),
 (10, 'basic', '网站关闭提示', 'string', 'basicCloseText', '网站维护中，暂时无法访问！本网站正在进行系统维护和技术升级，网站暂时无法访问，敬请谅解！', '网站维护中，暂时无法访问！本网站正在进行系统维护和技术升级，网站暂时无法访问，敬请谅解！', 60, '', 1, 1, '2021-01-30 13:27:43', '2024-04-21 22:58:29'),
@@ -1354,7 +1354,7 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (37, 'upload', 'UCloud地域API', 'string', 'uploadUCloudBucketHost', 'api.ucloud.cn', 'api.ucloud.cn', 390, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (38, 'upload', 'UCloud存储桶名称', 'string', 'uploadUCloudBucketName', 'bufanyun', '', 400, '存储空间名称', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (39, 'upload', 'UCloud存储桶地域host', 'string', 'uploadUCloudFileHost', 'cn-bj.ufileos.com', 'cn-bj.ufileos.com', 410, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
-(40, 'upload', 'UCloud访问域名', 'string', 'uploadUCloudEndpoint', 'http://bufanyun.cn-bj.ufileos.com', '', 420, '格式，http://abc.com 或  https://abc.com，不可为空', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
+(40, 'upload', 'UCloud访问域名', 'string', 'uploadUCloudEndpoint', 'https://gmycos.facms.cn', '', 420, '格式，http://abc.com 或  https://abc.com，不可为空', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (41, 'geo', '高德Web服务key', 'string', 'geoAmapWebKey', '', '', 500, '申请地址：https://console.amap.com/dev/key/app', 1, 1, '2021-01-30 13:27:43', '2022-12-07 15:48:43'),
 (42, 'sms', '短信驱动,aliyun：阿里云;tencent：腾讯云', 'string', 'smsDrive', 'tencent', '', 600, '', 1, 1, '2021-01-30 13:27:43', '2023-04-10 13:55:32'),
 (43, 'sms', '阿里云AccessKeyID', 'string', 'smsAliYunAccessKeyID', '', '', 610, '应用key和密钥你可以通过 https://ram.console.aliyun.com/manage/ak 获取', 1, 1, '2021-01-30 13:27:43', '2023-04-10 13:55:32'),
@@ -1426,7 +1426,7 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (116, 'login', '默认注册角色', 'int64', 'loginRoleId', '210', '', 1140, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:49'),
 (117, 'login', '默认注册部门', 'int64', 'loginDeptId', '110', '', 1150, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:48'),
 (118, 'login', '默认注册岗位', '[]int64', 'loginPostIds', '[4]', '', 1160, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:48'),
-(119, 'login', '默认注册头像', 'string', 'loginAvatar', 'http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', '', 1170, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:48'),
+(119, 'login', '默认注册头像', 'string', 'loginAvatar', 'https://gmycos.facms.cn/hotgo/attachment/2023-02-09/cqdq8er9nfkchdopav.png', '', 1170, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:48'),
 (120, 'login', '强制邀请', 'int', 'loginForceInvite', '2', '1', 1190, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:49'),
 (121, 'login', '自动获取openId', 'int', 'loginAutoOpenId', '2', '1', 1195, '', 1, 1, '2021-09-29 23:51:21', '2024-08-27 19:02:48'),
 (122, 'upload', 'minio AccessKey', 'string', 'uploadMinioAccessKey', '', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
@@ -1435,8 +1435,8 @@ INSERT INTO `hg_sys_config` (`id`, `group`, `name`, `type`, `key`, `value`, `def
 (125, 'upload', 'minio是否启用SSL', 'int', 'uploadMinioUseSSL', '1', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (126, 'upload', 'minio存储路径', 'string', 'uploadMinioPath', 'hotgo/attachment/', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
 (127, 'upload', 'minio桶名称', 'string', 'uploadMinioBucket', '', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
-(128, 'upload', 'minio对外访问域名', 'string', 'uploadMinioDomain', '', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35');
-
+(128, 'upload', 'minio对外访问域名', 'string', 'uploadMinioDomain', '', '', 650, '', 1, 1, '2021-01-30 13:27:43', '2024-02-28 16:56:35'),
+(129, 'login', '验证码方式', 'int', 'loginCaptchaType', '1', '2', 1200, '', 1, 1, '2025-06-25 17:04:39', '2025-06-25 17:23:15');
 -- --------------------------------------------------------
 
 --
@@ -1743,7 +1743,7 @@ CREATE TABLE IF NOT EXISTS `hg_sys_gen_curd_demo` (
 --
 
 INSERT INTO `hg_sys_gen_curd_demo` (`id`, `category_id`, `title`, `description`, `content`, `image`, `attachfile`, `city_id`, `switch`, `sort`, `status`, `created_by`, `updated_by`, `deleted_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, '测试标题', '这是一个CRUD生成演示，关联测试分类', '<h2><strong>不知道写点啥！</strong></h2><p><br></p><iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://media.w3.org/2010/05/sintel/trailer.mp4"></iframe><p><br></p><p><img src="http://bufanyun.cn-bj.ufileos.com/hotgo/attachment/2023-02-09/cqdq9iuv0phsg8patk.png"></p>', 'http://localhost:8000/attachment/2024-07-25/d2ygbofye7ogy6kf5b.png', '["http://localhost:8000/attachment/2024-07-25/d2yh86z5wxgoyuuyv7.png","http://localhost:8000/attachment/2024-07-25/d2yh88mewqkovxgk0l.png"]', 120102, 1, 10, 1, 1, 1, NULL, '2022-12-15 19:30:14', '2024-07-25 16:28:31', NULL);
+(1, 1, '测试标题', '这是一个CRUD生成演示，关联测试分类', '<h2><strong>不知道写点啥！</strong></h2><p><br></p><iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://media.w3.org/2010/05/sintel/trailer.mp4"></iframe><p><br></p><p><img src="https://gmycos.facms.cn/hotgo/attachment/2023-02-09/cqdq9iuv0phsg8patk.png"></p>', 'https://gmycos.facms.cn/hotgo/attachment/2023-02-09/cqdqamvhlq4w3ki6bl.webp', 'http://localhost:8000/attachment/2024-07-25/d2yh86z5wxgoyuuyv7.png', 120102, 1, 10, 1, 1, 1, NULL, '2022-12-15 19:30:14', '2024-07-25 16:28:31', NULL);
 
 -- --------------------------------------------------------
 
