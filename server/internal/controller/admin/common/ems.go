@@ -8,9 +8,9 @@ package common
 import (
 	"context"
 	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/frame/g"
 	"hotgo/api/admin/common"
 	"hotgo/internal/consts"
+	"hotgo/internal/dao"
 	"hotgo/internal/library/contexts"
 	"hotgo/internal/model/entity"
 	"hotgo/internal/model/input/sysin"
@@ -53,7 +53,7 @@ func (c *cEms) SendBindEms(ctx context.Context, _ *common.SendBindEmsReq) (res *
 		return
 	}
 
-	if err = g.Model("admin_member").Fields("email").Where("id", memberId).Scan(&models); err != nil {
+	if err = dao.AdminMember.Ctx(ctx).Fields(dao.AdminMember.Columns().Email).Where(dao.AdminMember.Columns().Id, memberId).Scan(&models); err != nil {
 		return
 	}
 
