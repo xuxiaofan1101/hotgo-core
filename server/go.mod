@@ -14,6 +14,7 @@ require (
 	github.com/forgoer/openssl v1.6.1
 	github.com/go-pay/crypto v0.0.1
 	github.com/go-pay/gopay v1.5.114
+	github.com/go-pay/smap v0.0.2
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.9.0
 	github.com/gogf/gf/contrib/nosql/redis/v2 v2.9.0
 	github.com/gogf/gf/contrib/trace/jaeger/v2 v2.7.4
@@ -34,6 +35,7 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.66
 	github.com/ufilesdk-dev/ufile-gosdk v1.0.6
 	github.com/xuri/excelize/v2 v2.9.1
+	github.com/xuxiaofan1101/agollo/v4 v4.4.1
 	go.opentelemetry.io/otel v1.37.0
 	golang.org/x/mod v0.25.0
 	golang.org/x/net v0.41.0
@@ -73,7 +75,6 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-pay/errgroup v0.0.3 // indirect
-	github.com/go-pay/smap v0.0.2 // indirect
 	github.com/go-pay/util v0.0.4 // indirect
 	github.com/go-pay/xlog v0.0.3 // indirect
 	github.com/go-pay/xtime v0.0.2 // indirect
@@ -82,7 +83,7 @@ require (
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/gofrs/flock v0.8.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
-	github.com/golang/mock v1.4.4 // indirect
+	github.com/golang/mock v1.5.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
@@ -91,6 +92,7 @@ require (
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jcmturner/aescts/v2 v2.0.0 // indirect
 	github.com/jcmturner/dnsutils/v2 v2.0.0 // indirect
 	github.com/jcmturner/gofork v1.7.6 // indirect
@@ -111,9 +113,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
-	github.com/olekukonko/errors v0.0.0-20250405072817-4e6d85265da6 // indirect
-	github.com/olekukonko/ll v0.0.8 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/pelletier/go-toml v1.9.3 // indirect
 	github.com/philhofer/fwd v1.1.3-0.20240916144458-20a13a1f6b7c // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
@@ -126,7 +127,12 @@ require (
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/viper v1.8.1 // indirect
+	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/tidwall/gjson v1.14.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
@@ -143,10 +149,9 @@ require (
 	go.opentelemetry.io/otel/metric v1.37.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.32.0 // indirect
 	go.opentelemetry.io/otel/trace v1.37.0 // indirect
-	go.uber.org/atomic v1.5.1 // indirect
+	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/image v0.25.0 // indirect
-	golang.org/x/lint v0.0.0-20190930215403-16217165b5de // indirect
 	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
@@ -154,6 +159,7 @@ require (
 	golang.org/x/time v0.12.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	modernc.org/fileutil v1.0.0 // indirect
 	stathat.com/c/consistent v1.0.0 // indirect
 )

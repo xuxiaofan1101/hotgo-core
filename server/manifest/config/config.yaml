@@ -1,6 +1,6 @@
 apollo:
   AppID: "hotgo"
-  Ip: "http://192.168.2.13:8080"
+  Ip: "http://192.168.100.52:8080/"
   Cluster: "default"
   NamespaceName: "server.yaml"
   IsBackupConfig: true
