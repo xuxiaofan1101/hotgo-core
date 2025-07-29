@@ -1,0 +1,18 @@
+services:
+  redis:
+    image: redis:7.2-alpine  # 使用轻量级 Alpine 版本
+    container_name: redis
+    restart: always           # 自动重启
+    ports:
+      - "6379:6379"           # 宿主机端口:容器端口
+    volumes:
+      - ./data:/data    # 数据持久化目录
+    command: redis-server --appendonly yes  # 启用 AOF 持久化
+    environment:
+      - TZ=Asia/Shanghai      # 设置时区
+      - REDIS_PASSWORD=123456  # 设置访问密码（可选）
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

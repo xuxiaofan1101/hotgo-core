@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.4.6
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456         # 设置 root 密码
+#      MYSQL_DATABASE: app_db             # 创建默认数据库
+#      MYSQL_USER: app_user               # 创建应用用户
+#      MYSQL_PASSWORD: userpassword       # 应用用户密码
+      TZ: Asia/Shanghai                   # 设置时区
+    volumes:
+      - ./data/db:/var/lib/mysql      # 数据持久化
+      - ./data/conf:/etc/mysql/conf.d   # 自定义配置
+      - ./data/init:/docker-entrypoint-initdb.d # 初始化脚本
+    ports:
+      - "3306:3306"                      # 暴露端口
+    restart: always                      # 自动重启
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 1s
+      retries: 10
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
