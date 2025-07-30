@@ -18,16 +18,16 @@ func init() {
 	g.Cfg().GetAdapter().(*gcfg.AdapterFile).SetFileName(*configFile)
 
 	adapter, err := apollo.New(ctx, apollo.Config{
-		AppID:             g.Cfg().MustGet(ctx, `apollo.AppID`).String(),
-		IP:                g.Cfg().MustGet(ctx, `apollo.Ip`).String(),
-		Cluster:           g.Cfg().MustGet(ctx, `apollo.Cluster`).String(),
-		NamespaceName:     g.Cfg().MustGet(ctx, `apollo.NamespaceName`).String(),
-		IsBackupConfig:    g.Cfg().MustGet(ctx, `apollo.IsBackupConfig`).Bool(),
-		BackupConfigPath:  g.Cfg().MustGet(ctx, `apollo.BackupConfigPath`).String(),
-		Secret:            g.Cfg().MustGet(ctx, `apollo.Secret`).String(),
-		SyncServerTimeout: g.Cfg().MustGet(ctx, `apollo.SyncServerTimeout`).Int(),
-		MustStart:         g.Cfg().MustGet(ctx, `apollo.MustStart`).Bool(),
-		Watch:             g.Cfg().MustGet(ctx, `apollo.Watch`).Bool(),
+		AppID:             g.Cfg().MustGet(ctx, `Apollo.AppID`).String(),
+		IP:                g.Cfg().MustGet(ctx, `Apollo.IP`).String(),
+		Cluster:           g.Cfg().MustGet(ctx, `Apollo.Cluster`).String(),
+		NamespaceName:     g.Cfg().MustGet(ctx, `Apollo.NamespaceName`).String(),
+		IsBackupConfig:    g.Cfg().MustGet(ctx, `Apollo.IsBackupConfig`).Bool(),
+		BackupConfigPath:  g.Cfg().MustGet(ctx, `Apollo.BackupConfigPath`).String(),
+		Secret:            g.Cfg().MustGet(ctx, `Apollo.Secret`).String(),
+		SyncServerTimeout: g.Cfg().MustGet(ctx, `Apollo.SyncServerTimeout`).Int(),
+		MustStart:         g.Cfg().MustGet(ctx, `Apollo.MustStart`).Bool(),
+		Watch:             g.Cfg().MustGet(ctx, `Apollo.Watch`).Bool(),
 	})
 	if err != nil {
 		g.Log().Fatalf(ctx, `%+v`, err)
