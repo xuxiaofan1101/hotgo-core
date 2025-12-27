@@ -8,6 +8,17 @@ package global
 import (
 	"context"
 	"fmt"
+	"hotgo/internal/consts"
+	"hotgo/internal/library/cache"
+	"hotgo/internal/library/queue"
+	"hotgo/internal/model/entity"
+	"hotgo/internal/service"
+	"hotgo/utility/charset"
+	"hotgo/utility/simple"
+	"hotgo/utility/validate"
+	"runtime"
+	"strings"
+
 	"github.com/gogf/gf/contrib/trace/jaeger/v2"
 	"github.com/gogf/gf/v2"
 	"github.com/gogf/gf/v2/container/gvar"
@@ -19,16 +30,6 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gmode"
-	"hotgo/internal/consts"
-	"hotgo/internal/library/cache"
-	"hotgo/internal/library/queue"
-	"hotgo/internal/model/entity"
-	"hotgo/internal/service"
-	"hotgo/utility/charset"
-	"hotgo/utility/simple"
-	"hotgo/utility/validate"
-	"runtime"
-	"strings"
 )
 
 func Init(ctx context.Context) {
@@ -36,7 +37,7 @@ func Init(ctx context.Context) {
 	SetGFMode(ctx)
 
 	// 设置服务日志处理
-	glog.SetDefaultHandler(LoggingServeLogHandler)
+	glog.SetDefaultHandler(glog.HandlerJson)
 
 	// 默认上海时区
 	if err := gtime.SetTimeZone("Asia/Shanghai"); err != nil {
