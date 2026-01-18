@@ -116,7 +116,7 @@
       <FormOther moduleKey="register" tag="注册账号" @updateActiveModule="updateActiveModule" />
     </n-space>
 
-<!--    <DemoAccount @login="handleDemoAccountLogin" />-->
+    <!--    <DemoAccount @login="handleDemoAccountLogin" />-->
   </n-form>
 </template>
 
@@ -131,13 +131,12 @@
   import { PageEnum } from '@/enums/pageEnum';
   import { SafetyCertificateOutlined, MobileOutlined } from '@vicons/antd';
   import { GetCaptcha } from '@/api/base';
-  import { aesEcb } from '@/utils/encrypt';
-  import DemoAccount from './demo-account.vue';
   import FormOther from '../components/form-other.vue';
   import { useSendCode } from '@/hooks/common';
   import { SendSms } from '@/api/system/user';
   import { validate } from '@/utils/validateUtil';
   import { useDebounceFn } from '@vueuse/core';
+  import { base64 } from '@/utils/base64';
 
   interface Props {
     mode: string;
@@ -210,10 +209,16 @@
 
         const params = {
           username: formInline.value.username,
-          password: aesEcb.encrypt(formInline.value.pass),
+          password: base64.encode(formInline.value.pass),
           cid: formInline.value.cid,
           code: formInline.value.code,
         };
+        console.log('登录提交参数：', {
+          username: params.username,
+          password: params.password,
+          cid: params.cid,
+          code: params.code,
+        });
         await handleLoginResp(userStore.login(params));
       } else {
         message.error('请填写完整信息，并且进行验证码校验');
@@ -231,15 +236,6 @@
     formInline.value.cid = data.cid;
     formInline.value.code = '';
     loadingBar.finish();
-  }
-
-  async function handleDemoAccountLogin(user: { username: string; password: string }) {
-    const params = {
-      username: user.username,
-      password: aesEcb.encrypt(user.password),
-      isLock: true,
-    };
-    await handleLoginResp(userStore.login(params));
   }
 
   const handleMobileSubmit = (e) => {

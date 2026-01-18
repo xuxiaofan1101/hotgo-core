@@ -146,7 +146,6 @@
   import { ResultEnum } from '@/enums/httpEnum';
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5';
   import { SafetyCertificateOutlined, MobileOutlined, TagOutlined } from '@vicons/antd';
-  import { aesEcb } from '@/utils/encrypt';
   import Agreement from './agreement.vue';
   import FormOther from '../components/form-other.vue';
   import { useSendCode } from '@/hooks/common';
@@ -154,6 +153,7 @@
   import { register, SendSms } from '@/api/system/user';
   import { useUserStore } from '@/store/modules/user';
   import { adaModalWidth } from '@/utils/hotgo';
+  import { base64 } from '@/utils/base64';
 
   interface FormState {
     username: string;
@@ -218,7 +218,7 @@
         try {
           const { code, message: msg } = await register({
             username: formInline.value.username,
-            password: aesEcb.encrypt(formInline.value.pass),
+            password: base64.encode(formInline.value.pass),
             mobile: formInline.value.mobile,
             code: formInline.value.code,
             inviteCode: formInline.value.inviteCode,

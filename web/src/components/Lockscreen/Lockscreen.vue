@@ -93,8 +93,8 @@
   import { useBattery } from '@/hooks/useBattery';
   import { useLockscreenStore } from '@/store/modules/lockscreen';
   import { useUserStore } from '@/store/modules/user';
-  import { aesEcb } from '@/utils/encrypt';
   import { TABS_ROUTES } from '@/store/mutation-types';
+  import { base64 } from '@/utils/base64';
 
   export default defineComponent({
     name: 'Lockscreen',
@@ -143,7 +143,7 @@
         const params = {
           isLock: true,
           username: state.loginParams.username,
-          password: aesEcb.encrypt(state.loginParams.password),
+          password: base64.encode(state.loginParams.password),
         };
         state.loginLoading = true;
         const { code, message } = await userStore.login(params);

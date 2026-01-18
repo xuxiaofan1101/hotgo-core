@@ -147,6 +147,8 @@ func (s *sAdminSite) AccountLogin(ctx context.Context, in *adminin.AccountLoginI
 		service.SysLoginLog().Push(ctx, &sysin.LoginLogPushInp{Response: res, Err: err})
 	}()
 
+	g.Log().Errorf(ctx, "前端传入密码:%#v", in)
+
 	var mb *entity.AdminMember
 	if err = dao.AdminMember.Ctx(ctx).Where("username", in.Username).Scan(&mb); err != nil {
 		err = gerror.Wrap(err, consts.ErrorORM)

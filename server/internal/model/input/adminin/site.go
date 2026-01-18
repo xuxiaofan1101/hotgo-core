@@ -2,9 +2,10 @@ package adminin
 
 import (
 	"context"
+	"encoding/base64"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
-	"hotgo/utility/simple"
 )
 
 // RegisterInp 账号注册
@@ -17,8 +18,8 @@ type RegisterInp struct {
 }
 
 func (in *RegisterInp) Filter(ctx context.Context) (err error) {
-	// 解密密码
-	password, err := simple.DecryptText(in.Password)
+	// base64解码密码
+	password, err := base64.StdEncoding.DecodeString(in.Password)
 	if err != nil {
 		return err
 	}
@@ -27,7 +28,7 @@ func (in *RegisterInp) Filter(ctx context.Context) (err error) {
 		return
 	}
 
-	in.Password = password
+	in.Password = string(password)
 	return
 }
 

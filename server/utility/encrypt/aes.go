@@ -3,11 +3,13 @@
 // @Copyright  Copyright (c) 2023 HotGo CLI
 // @Author  Ms <133814250@qq.com>
 // @License  https://github.com/bufanyun/hotgo/blob/master/LICENSE
-//
 package encrypt
 
 import (
+	"crypto/rand"
 	"encoding/base64"
+	"fmt"
+
 	"github.com/forgoer/openssl"
 )
 
@@ -39,4 +41,24 @@ func MustAesECBDecryptToString(bytCipher, key string) string {
 		panic(err)
 	}
 	return string(dst)
+}
+
+func GenerateAESKey(bits int) (string, error) {
+	var size int
+	switch bits {
+	case 128:
+		size = 16
+	case 192:
+		size = 24
+	case 256:
+		size = 32
+	default:
+		return "", fmt.Errorf("unsupported AES key size: %d, use 128/192/256", bits)
+	}
+
+	key := make([]byte, size)
+	if _, err := rand.Read(key); err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(key), nil
 }
