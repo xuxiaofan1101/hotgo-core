@@ -1,15 +1,16 @@
+name: hotgo
 services:
   mysql:
     image: mysql:8.4.6
-    container_name: mysql
+    container_name: hotgo-mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456         # 设置 root 密码
-#      MYSQL_DATABASE: app_db             # 创建默认数据库
-#      MYSQL_USER: app_user               # 创建应用用户
-#      MYSQL_PASSWORD: userpassword       # 应用用户密码
+      MYSQL_DATABASE: hotgo               # 创建默认数据库
+      MYSQL_USER: hotgo                   # 创建应用用户
+      MYSQL_PASSWORD: hg123456.           # 应用用户密码
       TZ: Asia/Shanghai                   # 设置时区
     volumes:
-      - ./data/db:/var/lib/mysql      # 数据持久化
+      - ./data/db:/var/lib/mysql        # 数据持久化
       - ./data/conf:/etc/mysql/conf.d   # 自定义配置
       - ./data/init:/docker-entrypoint-initdb.d # 初始化脚本
     ports:

@@ -1,7 +1,8 @@
+name: hotgo
 services:
   redis:
     image: redis:7.2-alpine  # 使用轻量级 Alpine 版本
-    container_name: redis
+    container_name: hotgo-redis
     restart: always           # 自动重启
     ports:
       - "6379:6379"           # 宿主机端口:容器端口

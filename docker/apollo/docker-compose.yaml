@@ -1,3 +1,4 @@
+name: hotgo
 services:
   apollo-quick-start:
     image: nobodyiam/apollo-quick-start
