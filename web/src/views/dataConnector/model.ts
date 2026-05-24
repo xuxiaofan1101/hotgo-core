@@ -182,6 +182,11 @@ export function loadOptions() {
   dict.loadOptions([
     'DataConnectorDirectionOptions',
     'DataConnectorTypeOptions',
+    'DataConnectorSourceTypeOptions',
+    'DataConnectorSinkTypeOptions',
+    'DataKafkaAuthModeOptions',
+    'DataS3CredentialModeOptions',
+    'DataLogLevelOptions',
     'sys_normal_disable',
   ]);
 }

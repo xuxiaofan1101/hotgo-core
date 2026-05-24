@@ -12,6 +12,16 @@ import (
 func init() {
 	dict.RegisterEnums("DataConnectorDirectionOptions", "数据源方向选项", DataConnectorDirectionOptions)
 	dict.RegisterEnums("DataConnectorTypeOptions", "数据源类型选项", DataConnectorTypeOptions)
+	dict.RegisterEnums("DataConnectorSourceTypeOptions", "输入数据源类型选项", DataConnectorSourceTypeOptions)
+	dict.RegisterEnums("DataConnectorSinkTypeOptions", "输出数据源类型选项", DataConnectorSinkTypeOptions)
+	dict.RegisterEnums("DataKafkaAuthModeOptions", "Kafka认证模式选项", DataKafkaAuthModeOptions)
+	dict.RegisterEnums("DataS3CredentialModeOptions", "S3凭证模式选项", DataS3CredentialModeOptions)
+	dict.RegisterEnums("DataLogLevelOptions", "日志级别选项", DataLogLevelOptions)
+	dict.RegisterEnums("DataKafkaStartModeOptions", "Kafka起始位置选项", DataKafkaStartModeOptions)
+	dict.RegisterEnums("DataSampleModeOptions", "采样模式选项", DataSampleModeOptions)
+	dict.RegisterEnums("DataPayloadFormatOptions", "数据格式选项", DataPayloadFormatOptions)
+	dict.RegisterEnums("DataSinkModeOptions", "下游分发模式选项", DataSinkModeOptions)
+	dict.RegisterEnums("DataSinkFailurePolicyOptions", "下游分发失败策略选项", DataSinkFailurePolicyOptions)
 	dict.RegisterEnums("DataCleanErrorPolicyOptions", "数据清洗失败策略选项", DataCleanErrorPolicyOptions)
 	dict.RegisterEnums("DataUnknownFieldPolicyOptions", "数据清洗未知字段策略选项", DataUnknownFieldPolicyOptions)
 	dict.RegisterEnums("DataFieldTypeOptions", "数据字段类型选项", DataFieldTypeOptions)
@@ -57,6 +67,99 @@ var DataConnectorTypeOptions = []*model.Option{
 	dict.GenHashOption(DataConnectorTypeElasticsearch, "Elasticsearch"),
 	dict.GenHashOption(DataConnectorTypeOpensearch, "OpenSearch"),
 	dict.GenHashOption(DataConnectorTypeSplunk, "Splunk"),
+}
+
+var DataConnectorSourceTypeOptions = []*model.Option{
+	dict.GenInfoOption(DataConnectorTypeHTTP, "HTTP"),
+	dict.GenPrimaryOption(DataConnectorTypeKafka, "Kafka"),
+	dict.GenWarningOption(DataConnectorTypeS3, "S3"),
+	dict.GenDefaultOption(DataConnectorTypeLog, "日志"),
+	dict.GenDefaultOption(DataConnectorTypeManual, "手动"),
+}
+
+var DataConnectorSinkTypeOptions = []*model.Option{
+	dict.GenInfoOption(DataConnectorTypeHTTP, "HTTP Webhook"),
+	dict.GenPrimaryOption(DataConnectorTypeKafka, "Kafka"),
+	dict.GenHashOption(DataConnectorTypeFeishu, "Feishu/Lark 飞书群机器人"),
+	dict.GenHashOption(DataConnectorTypeLark, "Lark"),
+	dict.GenWarningOption(DataConnectorTypeS3, "S3"),
+	dict.GenHashOption(DataConnectorTypeElasticsearch, "Elasticsearch"),
+	dict.GenHashOption(DataConnectorTypeOpensearch, "OpenSearch"),
+	dict.GenHashOption(DataConnectorTypeSplunk, "Splunk HEC"),
+	dict.GenDefaultOption(DataConnectorTypeLog, "日志"),
+}
+
+const (
+	DataKafkaAuthModeNone         = "none"
+	DataKafkaAuthModePlain        = "plain"
+	DataKafkaAuthModeScramSha256  = "scram-sha-256"
+	DataKafkaAuthModeScramSha512  = "scram-sha-512"
+	DataKafkaAuthModeOAuthBearer  = "oauthbearer"
+	DataS3CredentialModeRole      = "role"
+	DataS3CredentialModeStatic    = "static"
+	DataS3CredentialModeAnonymous = "anonymous"
+	DataKafkaStartModeLatest      = "latest"
+	DataKafkaStartModeEarliest    = "earliest"
+	DataKafkaStartModeOffset      = "offset"
+	DataSampleModeLatest          = "latest"
+	DataSampleModeEarliest        = "earliest"
+	DataSampleModeRandom          = "random"
+	DataPayloadFormatJSON         = "json"
+	DataPayloadFormatJSONLines    = "json_lines"
+	DataPayloadFormatText         = "text"
+	DataSinkModeParallel          = "parallel"
+	DataSinkModeSerial            = "serial"
+	DataSinkFailurePolicyContinue = "continue"
+	DataSinkFailurePolicyStop     = "stop"
+)
+
+var DataKafkaAuthModeOptions = []*model.Option{
+	dict.GenDefaultOption(DataKafkaAuthModeNone, "无认证"),
+	dict.GenPrimaryOption(DataKafkaAuthModePlain, "SASL/PLAIN"),
+	dict.GenWarningOption(DataKafkaAuthModeScramSha256, "SCRAM-SHA-256"),
+	dict.GenWarningOption(DataKafkaAuthModeScramSha512, "SCRAM-SHA-512"),
+	dict.GenInfoOption(DataKafkaAuthModeOAuthBearer, "OAuth Bearer"),
+}
+
+var DataS3CredentialModeOptions = []*model.Option{
+	dict.GenPrimaryOption(DataS3CredentialModeRole, "云角色"),
+	dict.GenWarningOption(DataS3CredentialModeStatic, "静态 AK/SK"),
+	dict.GenDefaultOption(DataS3CredentialModeAnonymous, "匿名访问"),
+}
+
+var DataLogLevelOptions = []*model.Option{
+	dict.GenDefaultOption("debug", "debug"),
+	dict.GenInfoOption("info", "info"),
+	dict.GenWarningOption("warning", "warning"),
+	dict.GenErrorOption("error", "error"),
+}
+
+var DataKafkaStartModeOptions = []*model.Option{
+	dict.GenPrimaryOption(DataKafkaStartModeLatest, "从最新位置开始"),
+	dict.GenInfoOption(DataKafkaStartModeEarliest, "从最早位置开始"),
+	dict.GenWarningOption(DataKafkaStartModeOffset, "指定 Offset"),
+}
+
+var DataSampleModeOptions = []*model.Option{
+	dict.GenPrimaryOption(DataSampleModeLatest, "最新数据"),
+	dict.GenInfoOption(DataSampleModeEarliest, "最早数据"),
+	dict.GenWarningOption(DataSampleModeRandom, "随机采样"),
+}
+
+var DataPayloadFormatOptions = []*model.Option{
+	dict.GenPrimaryOption(DataPayloadFormatJSON, "JSON"),
+	dict.GenInfoOption(DataPayloadFormatJSONLines, "JSON Lines"),
+	dict.GenDefaultOption(DataPayloadFormatText, "文本"),
+}
+
+var DataSinkModeOptions = []*model.Option{
+	dict.GenPrimaryOption(DataSinkModeParallel, "并行分发"),
+	dict.GenInfoOption(DataSinkModeSerial, "顺序分发"),
+}
+
+var DataSinkFailurePolicyOptions = []*model.Option{
+	dict.GenWarningOption(DataSinkFailurePolicyContinue, "继续分发"),
+	dict.GenErrorOption(DataSinkFailurePolicyStop, "停止分发"),
 }
 
 const (

@@ -395,6 +395,7 @@
   import { Edit, Test, View } from '@/api/dataConnector';
   import { State, newState, rules } from './model';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
+  import { useDictStore } from '@/store/modules/dict';
   import { useMessage } from 'naive-ui';
   import { adaModalWidth } from '@/utils/hotgo';
 
@@ -402,6 +403,7 @@
 
   const emit = defineEmits(['reloadTable']);
   const message = useMessage();
+  const dict = useDictStore();
   const settingStore = useProjectSettingStore();
   const loading = ref(false);
   const showModal = ref(false);
@@ -414,51 +416,12 @@
     return adaModalWidth(920);
   });
 
-  const directionOptions = [
-    { label: '输入', value: 'source' },
-    { label: '输出', value: 'sink' },
-  ];
-
-  const sourceTypeOptions = [
-    { label: 'HTTP', value: 'http' },
-    { label: 'Kafka', value: 'kafka' },
-    { label: 'S3', value: 's3' },
-    { label: '日志', value: 'log' },
-    { label: '手动', value: 'manual' },
-  ];
-
-  const sinkTypeOptions = [
-    { label: 'HTTP Webhook', value: 'http' },
-    { label: 'Kafka', value: 'kafka' },
-    { label: 'Feishu/Lark 飞书群机器人', value: 'feishu' },
-    { label: 'Lark', value: 'lark' },
-    { label: 'S3', value: 's3' },
-    { label: 'Elasticsearch', value: 'elasticsearch' },
-    { label: 'OpenSearch', value: 'opensearch' },
-    { label: 'Splunk HEC', value: 'splunk' },
-    { label: '日志', value: 'log' },
-  ];
-
-  const kafkaAuthOptions = [
-    { label: '无认证', value: 'none' },
-    { label: 'SASL/PLAIN', value: 'plain' },
-    { label: 'SCRAM-SHA-256', value: 'scram-sha-256' },
-    { label: 'SCRAM-SHA-512', value: 'scram-sha-512' },
-    { label: 'OAuth Bearer', value: 'oauthbearer' },
-  ];
-
-  const credentialModeOptions = [
-    { label: '云角色', value: 'role' },
-    { label: '静态 AK/SK', value: 'static' },
-    { label: '匿名访问', value: 'anonymous' },
-  ];
-
-  const logLevelOptions = [
-    { label: 'debug', value: 'debug' },
-    { label: 'info', value: 'info' },
-    { label: 'warning', value: 'warning' },
-    { label: 'error', value: 'error' },
-  ];
+  const directionOptions = computed(() => dict.getOptionUnRef('DataConnectorDirectionOptions'));
+  const sourceTypeOptions = computed(() => dict.getOptionUnRef('DataConnectorSourceTypeOptions'));
+  const sinkTypeOptions = computed(() => dict.getOptionUnRef('DataConnectorSinkTypeOptions'));
+  const kafkaAuthOptions = computed(() => dict.getOptionUnRef('DataKafkaAuthModeOptions'));
+  const credentialModeOptions = computed(() => dict.getOptionUnRef('DataS3CredentialModeOptions'));
+  const logLevelOptions = computed(() => dict.getOptionUnRef('DataLogLevelOptions'));
 
   const configForm = reactive({
     accessKey: '',
@@ -491,7 +454,7 @@
 
   const isSource = computed(() => formValue.value.direction === 'source');
   const formTypeOptions = computed(() => {
-    return isSource.value ? sourceTypeOptions : sinkTypeOptions;
+    return isSource.value ? sourceTypeOptions.value : sinkTypeOptions.value;
   });
   const kafkaAuthNeedsPassword = computed(() => {
     return (

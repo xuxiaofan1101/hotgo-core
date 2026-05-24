@@ -194,6 +194,11 @@ export function loadOptions() {
     'DataCleanActionOptions',
     'DataCleanFilterOperatorOptions',
     'DataSinkTargetTypeOptions',
+    'DataKafkaStartModeOptions',
+    'DataSampleModeOptions',
+    'DataPayloadFormatOptions',
+    'DataSinkModeOptions',
+    'DataSinkFailurePolicyOptions',
     'sys_normal_disable',
   ]);
 }

@@ -711,29 +711,13 @@
     dict.getOptionUnRef('DataUnknownFieldPolicyOptions')
   );
 
-  const kafkaStartModeOptions = [
-    { label: '从最新位置开始', value: 'latest' },
-    { label: '从最早位置开始', value: 'earliest' },
-    { label: '指定 Offset', value: 'offset' },
-  ];
-  const sampleModeOptions = [
-    { label: '最新数据', value: 'latest' },
-    { label: '最早数据', value: 'earliest' },
-    { label: '随机采样', value: 'random' },
-  ];
-  const payloadFormatOptions = [
-    { label: 'JSON', value: 'json' },
-    { label: 'JSON Lines', value: 'json_lines' },
-    { label: '文本', value: 'text' },
-  ];
-  const sinkModeOptions = [
-    { label: '并行分发', value: 'parallel' },
-    { label: '顺序分发', value: 'serial' },
-  ];
-  const sinkFailurePolicyOptions = [
-    { label: '继续分发', value: 'continue' },
-    { label: '停止分发', value: 'stop' },
-  ];
+  const kafkaStartModeOptions = computed(() => dict.getOptionUnRef('DataKafkaStartModeOptions'));
+  const sampleModeOptions = computed(() => dict.getOptionUnRef('DataSampleModeOptions'));
+  const payloadFormatOptions = computed(() => dict.getOptionUnRef('DataPayloadFormatOptions'));
+  const sinkModeOptions = computed(() => dict.getOptionUnRef('DataSinkModeOptions'));
+  const sinkFailurePolicyOptions = computed(() =>
+    dict.getOptionUnRef('DataSinkFailurePolicyOptions')
+  );
 
   const sourceConfigForm = reactive({
     bucket: '',
