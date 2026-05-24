@@ -2,11 +2,12 @@ package boot
 
 import (
 	"flag"
+	"hotgo/common/apollo"
+
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcfg"
 	"github.com/gogf/gf/v2/os/gctx"
-	"hotgo/common/apollo"
 )
 
 var ctx = gctx.GetInitCtx()
@@ -40,14 +41,14 @@ func init() {
 		Host:   "127.0.0.1",
 		Port:   "3306",
 		User:   "hotgo",
-		Pass:   "hotgo123456.",
-		Link:   "mysql:hotgo:hg123456.@tcp(127.0.0.1:3306)/hotgo?loc=Local&parseTime=true&charset=utf8mb4",
+		Pass:   "123456",
+		Link:   "mysql:hotgo:123456@tcp(127.0.0.1:3306)/hotgo?loc=Local&parseTime=true&charset=utf8mb4",
 		Prefix: "hg_",
 	}
 	//手动设置新的mysql配置
 	gdb.AddConfigNode("default", configNode)
 
-	link := "mysql:hotgo:hg123456.@tcp(127.0.0.1:3306)/hotgo?loc=Local&parseTime=true&charset=utf8mb4"
+	link := "mysql:hotgo:123456@tcp(127.0.0.1:3306)/hotgo?loc=Local&parseTime=true&charset=utf8mb4"
 	//动态修改配置内容
 	dynamicContent := map[string]interface{}{
 		"database.default.link":   link,

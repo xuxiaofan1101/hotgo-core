@@ -171,6 +171,22 @@ type (
 		// Switch 更新CURD列表开关
 		Switch(ctx context.Context, in *sysin.CurdDemoSwitchInp) (err error)
 	}
+	ISysDataConnector interface {
+		// Model 数据源ORM模型
+		Model(ctx context.Context, option ...*handler.Option) *gdb.Model
+		// List 获取数据源列表
+		List(ctx context.Context, in *sysin.DataConnectorListInp) (list []*sysin.DataConnectorListModel, totalCount int, err error)
+		// Edit 修改/新增数据源
+		Edit(ctx context.Context, in *sysin.DataConnectorEditInp) (err error)
+		// Delete 删除数据源
+		Delete(ctx context.Context, in *sysin.DataConnectorDeleteInp) (err error)
+		// View 获取数据源指定信息
+		View(ctx context.Context, in *sysin.DataConnectorViewInp) (res *sysin.DataConnectorViewModel, err error)
+		// Status 更新数据源状态
+		Status(ctx context.Context, in *sysin.DataConnectorStatusInp) (err error)
+		// Test 测试数据源配置
+		Test(ctx context.Context, in *sysin.DataConnectorTestInp) (res *sysin.DataConnectorTestModel, err error)
+	}
 	ISysDictData interface {
 		// Delete 删除
 		Delete(ctx context.Context, in *sysin.DictDataDeleteInp) error
@@ -414,6 +430,7 @@ var (
 	localSysCron           ISysCron
 	localSysCronGroup      ISysCronGroup
 	localSysCurdDemo       ISysCurdDemo
+	localSysDataConnector  ISysDataConnector
 	localSysDictData       ISysDictData
 	localSysDictType       ISysDictType
 	localSysEmsLog         ISysEmsLog
@@ -515,6 +532,17 @@ func SysCurdDemo() ISysCurdDemo {
 
 func RegisterSysCurdDemo(i ISysCurdDemo) {
 	localSysCurdDemo = i
+}
+
+func SysDataConnector() ISysDataConnector {
+	if localSysDataConnector == nil {
+		panic("implement not found for interface ISysDataConnector, forgot register?")
+	}
+	return localSysDataConnector
+}
+
+func RegisterSysDataConnector(i ISysDataConnector) {
+	localSysDataConnector = i
 }
 
 func SysDictData() ISysDictData {

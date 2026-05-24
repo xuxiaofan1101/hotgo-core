@@ -9,7 +9,7 @@ services:
 #      MYSQL_PASSWORD: userpassword       # 应用用户密码
       TZ: Asia/Shanghai                   # 设置时区
     volumes:
-      - ./data/db:/var/lib/mysql      # 数据持久化
+      - ./data/mysql:/var/lib/mysql      # 数据持久化
       - ./data/conf:/etc/mysql/conf.d   # 自定义配置
       - ./data/init:/docker-entrypoint-initdb.d # 初始化脚本
     ports:

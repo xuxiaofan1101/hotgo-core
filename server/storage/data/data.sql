@@ -8,17 +8,17 @@
 --
 
 CREATE TABLE IF NOT EXISTS `hg_data_connector` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '连接ID',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '连接ID',
   `name` varchar(128) NOT NULL COMMENT '连接名称',
   `code` varchar(128) NOT NULL COMMENT '连接编码',
   `direction` varchar(16) NOT NULL COMMENT '连接方向：source=输入 sink=输出',
   `connector_type` varchar(32) NOT NULL COMMENT '连接类型：http,kafka,s3,log,manual,feishu,lark,elasticsearch,opensearch,splunk',
   `config` json DEFAULT NULL COMMENT '连接配置',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态',
+  `status` tinyint DEFAULT '1' COMMENT '状态',
   `remark` varchar(500) DEFAULT '' COMMENT '备注',
-  `created_by` bigint(20) DEFAULT '0' COMMENT '创建者',
-  `updated_by` bigint(20) DEFAULT '0' COMMENT '更新者',
-  `deleted_by` bigint(20) DEFAULT '0' COMMENT '删除者',
+  `created_by` bigint DEFAULT '0' COMMENT '创建者',
+  `updated_by` bigint DEFAULT '0' COMMENT '更新者',
+  `deleted_by` bigint DEFAULT '0' COMMENT '删除者',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
@@ -35,25 +35,25 @@ CREATE TABLE IF NOT EXISTS `hg_data_connector` (
 --
 
 CREATE TABLE IF NOT EXISTS `hg_data_clean_task` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '清洗任务ID',
-  `source_id` bigint(20) NOT NULL COMMENT '输入连接ID',
-  `template_id` bigint(20) DEFAULT '0' COMMENT '标准字段模板ID',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '清洗任务ID',
+  `source_id` bigint NOT NULL COMMENT '输入连接ID',
+  `template_id` bigint DEFAULT '0' COMMENT '标准字段模板ID',
   `name` varchar(128) NOT NULL COMMENT '任务名称',
   `code` varchar(128) NOT NULL COMMENT '任务编码',
   `event_type` varchar(128) NOT NULL COMMENT '事件类型',
   `source_config` json DEFAULT NULL COMMENT '输入配置',
-  `clean_enabled` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否启用数据清洗',
+  `clean_enabled` tinyint NOT NULL DEFAULT '0' COMMENT '是否启用数据清洗',
   `clean_config` json DEFAULT NULL COMMENT '数据清洗配置',
-  `clean_config_version` int(11) NOT NULL DEFAULT '1' COMMENT '清洗配置版本',
-  `field_schema_version` int(11) NOT NULL DEFAULT '1' COMMENT '字段集合版本',
+  `clean_config_version` int NOT NULL DEFAULT '1' COMMENT '清洗配置版本',
+  `field_schema_version` int NOT NULL DEFAULT '1' COMMENT '字段集合版本',
   `unknown_field_policy` varchar(32) NOT NULL DEFAULT 'selected_only' COMMENT '未知字段策略：selected_only strict passthrough drop',
   `clean_error_policy` varchar(16) NOT NULL DEFAULT 'skip' COMMENT '清洗失败策略：skip keep_raw stop_task',
   `sink_config` json DEFAULT NULL COMMENT '输出配置',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态',
+  `status` tinyint DEFAULT '1' COMMENT '状态',
   `remark` varchar(500) DEFAULT '' COMMENT '备注',
-  `created_by` bigint(20) DEFAULT '0' COMMENT '创建者',
-  `updated_by` bigint(20) DEFAULT '0' COMMENT '更新者',
-  `deleted_by` bigint(20) DEFAULT '0' COMMENT '删除者',
+  `created_by` bigint DEFAULT '0' COMMENT '创建者',
+  `updated_by` bigint DEFAULT '0' COMMENT '更新者',
+  `deleted_by` bigint DEFAULT '0' COMMENT '删除者',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
@@ -71,15 +71,15 @@ CREATE TABLE IF NOT EXISTS `hg_data_clean_task` (
 --
 
 CREATE TABLE IF NOT EXISTS `hg_data_field` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字段ID',
-  `task_id` bigint(20) NOT NULL COMMENT '清洗任务ID',
-  `connector_id` bigint(20) NOT NULL COMMENT '输入连接ID',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '字段ID',
+  `task_id` bigint NOT NULL COMMENT '清洗任务ID',
+  `connector_id` bigint NOT NULL COMMENT '输入连接ID',
   `field_path` varchar(512) NOT NULL COMMENT '字段路径',
   `field_name` varchar(128) DEFAULT '' COMMENT '字段名称',
   `field_type` varchar(64) DEFAULT '' COMMENT '字段类型',
   `field_types` json DEFAULT NULL COMMENT '出现过的字段类型集合',
   `sample_value` json DEFAULT NULL COMMENT '样例值',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态',
+  `status` tinyint DEFAULT '1' COMMENT '状态',
   `remark` varchar(500) DEFAULT '' COMMENT '备注',
   `first_seen_at` datetime DEFAULT NULL COMMENT '首次发现时间',
   `last_seen_at` datetime DEFAULT NULL COMMENT '最后发现时间',
@@ -99,17 +99,17 @@ CREATE TABLE IF NOT EXISTS `hg_data_field` (
 --
 
 CREATE TABLE IF NOT EXISTS `hg_data_field_template` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字段模板ID',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '字段模板ID',
   `name` varchar(128) NOT NULL COMMENT '模板名称',
   `code` varchar(128) NOT NULL COMMENT '模板编码',
   `event_type` varchar(128) NOT NULL COMMENT '事件类型',
   `fields` json DEFAULT NULL COMMENT '标准字段定义',
   `examples` json DEFAULT NULL COMMENT '标准样例数据',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态',
+  `status` tinyint DEFAULT '1' COMMENT '状态',
   `remark` varchar(500) DEFAULT '' COMMENT '备注',
-  `created_by` bigint(20) DEFAULT '0' COMMENT '创建者',
-  `updated_by` bigint(20) DEFAULT '0' COMMENT '更新者',
-  `deleted_by` bigint(20) DEFAULT '0' COMMENT '删除者',
+  `created_by` bigint DEFAULT '0' COMMENT '创建者',
+  `updated_by` bigint DEFAULT '0' COMMENT '更新者',
+  `deleted_by` bigint DEFAULT '0' COMMENT '删除者',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
@@ -125,17 +125,17 @@ CREATE TABLE IF NOT EXISTS `hg_data_field_template` (
 --
 
 CREATE TABLE IF NOT EXISTS `hg_data_clean_stat` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '清洗统计ID',
-  `task_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '清洗任务ID',
-  `connector_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '输入连接ID',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '清洗统计ID',
+  `task_id` bigint NOT NULL DEFAULT '0' COMMENT '清洗任务ID',
+  `connector_id` bigint NOT NULL DEFAULT '0' COMMENT '输入连接ID',
   `event_type` varchar(128) NOT NULL DEFAULT '' COMMENT '事件类型',
   `window_start` datetime NOT NULL COMMENT '统计窗口开始时间',
   `window_end` datetime NOT NULL COMMENT '统计窗口结束时间',
-  `total_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '总处理数',
-  `success_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '成功数',
-  `failed_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '失败数',
-  `clean_failed_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '清洗失败数',
-  `dropped_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '丢弃数',
+  `total_count` bigint NOT NULL DEFAULT '0' COMMENT '总处理数',
+  `success_count` bigint NOT NULL DEFAULT '0' COMMENT '成功数',
+  `failed_count` bigint NOT NULL DEFAULT '0' COMMENT '失败数',
+  `clean_failed_count` bigint NOT NULL DEFAULT '0' COMMENT '清洗失败数',
+  `dropped_count` bigint NOT NULL DEFAULT '0' COMMENT '丢弃数',
   `last_error` text COMMENT '最近错误',
   `error_samples` json DEFAULT NULL COMMENT '错误样例',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
@@ -146,3 +146,36 @@ CREATE TABLE IF NOT EXISTS `hg_data_clean_stat` (
   KEY `idx_data_clean_stat_connector` (`connector_id`,`window_start`),
   KEY `idx_data_clean_stat_created` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统_数据清洗统计';
+
+-- --------------------------------------------------------
+
+--
+-- 数据集成菜单权限
+-- 可重复执行：以 hg_admin_menu.name 做忽略插入，并为 superadmin 写入菜单授权。
+--
+
+SET @now := NOW();
+
+START TRANSACTION;
+
+-- 一级目录：数据集成
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, 0, '数据集成', 'dataIntegration', '/dataIntegration', 'DatabaseOutlined', 1, '/dataIntegration/dataConnector', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 1, '', 220, '', 1, @now, @now);
+
+SET @dataIntegrationId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataIntegration' LIMIT 1);
+
+-- 二级菜单：数据源
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataIntegrationId, '数据源', 'dataConnector', 'dataConnector', '', 2, '', '/dataConnector/list', '', '/dataConnector/index', 1, '', 0, 0, '', 0, 0, 0, 2, CONCAT('tr_', @dataIntegrationId, ' '), 10, '', 1, @now, @now);
+
+SET @dataConnectorId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataConnector' LIMIT 1);
+
+-- 按钮权限
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataConnectorId, '数据源详情', 'dataConnectorView', '', '', 3, '', '/dataConnector/view', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 10, '', 1, @now, @now),(NULL, @dataConnectorId, '新增/编辑数据源', 'dataConnectorEdit', '', '', 3, '', '/dataConnector/edit', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 20, '', 1, @now, @now),(NULL, @dataConnectorId, '删除数据源', 'dataConnectorDelete', '', '', 3, '', '/dataConnector/delete', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 30, '', 1, @now, @now),(NULL, @dataConnectorId, '更新数据源状态', 'dataConnectorStatus', '', '', 3, '', '/dataConnector/status', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 40, '', 1, @now, @now),(NULL, @dataConnectorId, '测试数据源配置', 'dataConnectorTest', '', '', 3, '', '/dataConnector/test', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 50, '', 1, @now, @now);
+
+-- 默认授权给超级管理员角色
+INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
+SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataConnector', 'dataConnectorView', 'dataConnectorEdit', 'dataConnectorDelete', 'dataConnectorStatus', 'dataConnectorTest');
+
+COMMIT;
