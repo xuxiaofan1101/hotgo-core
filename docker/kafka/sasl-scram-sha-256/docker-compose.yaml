@@ -1,0 +1,79 @@
+name: hotgo-kafka-scram256
+
+services:
+  zookeeper:
+    image: bitnamilegacy/zookeeper:3.9.3-debian-12-r22
+    container_name: hotgo-zookeeper-scram256
+    restart: always
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+      TZ: Asia/Shanghai
+    ports:
+      - "22181:2181"
+    volumes:
+      - ./data/zookeeper:/bitnami/zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "zkServer.sh status >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app_network
+
+  kafka-scram-init:
+    image: bitnamilegacy/kafka:3.5.2-debian-12-r30
+    container_name: kafka-scram256-init-hotgo
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    command:
+      - /bin/bash
+      - -ec
+      - |
+        kafka-configs.sh --zookeeper zookeeper:2181 --alter \
+          --add-config 'SCRAM-SHA-256=[iterations=8192,password=admin-secret]' \
+          --entity-type users --entity-name admin
+        kafka-configs.sh --zookeeper zookeeper:2181 --alter \
+          --add-config 'SCRAM-SHA-256=[iterations=8192,password=hotgo-secret]' \
+          --entity-type users --entity-name hotgo
+    networks:
+      - app_network
+
+  kafka:
+    image: bitnamilegacy/kafka:3.5.2-debian-12-r30
+    container_name: kafka-scram256-hotgo
+    restart: always
+    depends_on:
+      kafka-scram-init:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_ENABLE_KRAFT: "no"
+      KAFKA_CFG_BROKER_ID: 1
+      KAFKA_CFG_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_CFG_LISTENERS: "INTERNAL://:9092,EXTERNAL://:19094"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://kafka:9092,EXTERNAL://localhost:19094"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_CFG_SASL_ENABLED_MECHANISMS: "SCRAM-SHA-256"
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: "SCRAM-SHA-256"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_server_jaas.conf"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      TZ: Asia/Shanghai
+    ports:
+      - "19094:19094"
+    volumes:
+      - ./data/kafka:/bitnami/kafka
+      - ./kafka_server_jaas.conf:/opt/bitnami/kafka/config/kafka_server_jaas.conf:ro
+      - ./client.properties:/opt/bitnami/kafka/config/client.properties:ro
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --command-config /opt/bitnami/kafka/config/client.properties --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
