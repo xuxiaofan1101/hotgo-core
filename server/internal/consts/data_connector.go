@@ -18,6 +18,9 @@ func init() {
 	dict.RegisterEnums("DataCleanActionOptions", "数据清洗动作选项", DataCleanActionOptions)
 	dict.RegisterEnums("DataCleanFilterOperatorOptions", "数据清洗过滤操作符选项", DataCleanFilterOperatorOptions)
 	dict.RegisterEnums("DataSinkTargetTypeOptions", "数据清洗输出目标类型选项", DataSinkTargetTypeOptions)
+	dict.RegisterEnums("DataAgentRegisterStatusOptions", "Agent注册状态选项", DataAgentRegisterStatusOptions)
+	dict.RegisterEnums("DataAgentDispatchStatusOptions", "Agent调度状态选项", DataAgentDispatchStatusOptions)
+	dict.RegisterEnums("DataAgentOnlineStatusOptions", "Agent在线状态选项", DataAgentOnlineStatusOptions)
 }
 
 const (
@@ -133,4 +136,38 @@ const (
 var DataSinkTargetTypeOptions = []*model.Option{
 	dict.GenPrimaryOption(DataSinkTargetTypeStrategyEngine, "策略引擎"),
 	dict.GenSuccessOption(DataSinkTargetTypeSink, "输出目标"),
+}
+
+const (
+	DataAgentRegisterStatusPending  = "pending"
+	DataAgentRegisterStatusApproved = "approved"
+	DataAgentRegisterStatusRejected = "rejected"
+	DataAgentRegisterStatusRevoked  = "revoked"
+)
+
+var DataAgentRegisterStatusOptions = []*model.Option{
+	dict.GenWarningOption(DataAgentRegisterStatusPending, "待审批"),
+	dict.GenSuccessOption(DataAgentRegisterStatusApproved, "已批准"),
+	dict.GenErrorOption(DataAgentRegisterStatusRejected, "已拒绝"),
+	dict.GenErrorOption(DataAgentRegisterStatusRevoked, "已吊销"),
+}
+
+const (
+	DataAgentDispatchStatusEnabled  = "enabled"
+	DataAgentDispatchStatusDisabled = "disabled"
+)
+
+var DataAgentDispatchStatusOptions = []*model.Option{
+	dict.GenSuccessOption(DataAgentDispatchStatusEnabled, "已开启"),
+	dict.GenWarningOption(DataAgentDispatchStatusDisabled, "已禁用"),
+}
+
+const (
+	DataAgentOnlineStatusOnline  = "online"
+	DataAgentOnlineStatusOffline = "offline"
+)
+
+var DataAgentOnlineStatusOptions = []*model.Option{
+	dict.GenSuccessOption(DataAgentOnlineStatusOnline, "在线"),
+	dict.GenDefaultOption(DataAgentOnlineStatusOffline, "离线"),
 }

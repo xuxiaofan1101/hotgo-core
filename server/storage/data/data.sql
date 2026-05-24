@@ -150,6 +150,35 @@ CREATE TABLE IF NOT EXISTS `hg_data_clean_stat` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `hg_data_agent`
+--
+
+CREATE TABLE IF NOT EXISTS `hg_data_agent` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '节点ID',
+  `agent_id` varchar(128) NOT NULL COMMENT 'Agent唯一标识',
+  `name` varchar(128) DEFAULT '' COMMENT '节点名称',
+  `hostname` varchar(255) DEFAULT '' COMMENT '主机名',
+  `version` varchar(64) DEFAULT '' COMMENT 'Agent版本',
+  `agent_ip` json DEFAULT NULL COMMENT 'Agent上报IP列表',
+  `register_status` varchar(16) NOT NULL DEFAULT 'pending' COMMENT '注册状态：pending approved rejected revoked',
+  `dispatch_status` varchar(16) NOT NULL DEFAULT 'disabled' COMMENT '调度状态：enabled disabled',
+  `last_seen_at` datetime DEFAULT NULL COMMENT '最近心跳时间',
+  `approved_by` bigint DEFAULT '0' COMMENT '批准人',
+  `approved_at` datetime DEFAULT NULL COMMENT '批准时间',
+  `disabled_at` datetime DEFAULT NULL COMMENT '禁用/拒绝/吊销时间',
+  `remark` varchar(500) DEFAULT '' COMMENT '备注',
+  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_data_agent_agent_id` (`agent_id`),
+  KEY `idx_data_agent_register` (`register_status`),
+  KEY `idx_data_agent_dispatch` (`dispatch_status`),
+  KEY `idx_data_agent_last_seen` (`last_seen_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统_数据集成Agent节点';
+
+-- --------------------------------------------------------
+
+--
 -- 数据源菜单权限，可独立执行
 --
 
@@ -236,5 +265,35 @@ INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`
 -- 字段模板默认授权给超级管理员角色
 INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
 SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataFieldTemplate', 'dataFieldTemplateView', 'dataFieldTemplateEdit', 'dataFieldTemplateDelete', 'dataFieldTemplateStatus');
+
+COMMIT;
+
+--
+-- 节点管理菜单权限，可独立执行
+--
+
+SET @now := NOW();
+
+START TRANSACTION;
+
+-- 一级目录：数据集成
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, 0, '数据集成', 'dataIntegration', '/dataIntegration', 'DatabaseOutlined', 1, '/dataIntegration/dataConnector', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 1, '', 220, '', 1, @now, @now);
+
+SET @dataIntegrationId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataIntegration' LIMIT 1);
+
+-- 二级菜单：节点管理
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataIntegrationId, '节点管理', 'dataAgent', 'dataAgent', '', 2, '', '/dataAgent/list', '', '/dataAgent/index', 1, '', 0, 0, '', 0, 0, 0, 2, CONCAT('tr_', @dataIntegrationId, ' '), 40, '', 1, @now, @now);
+
+SET @dataAgentId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataAgent' LIMIT 1);
+
+-- 节点管理按钮权限
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataAgentId, '查看节点', 'dataAgentList', '', '', 3, '', '/dataAgent/list', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataAgentId, ' '), 10, '', 1, @now, @now),(NULL, @dataAgentId, '批准节点', 'dataAgentApprove', '', '', 3, '', '/dataAgent/approve', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataAgentId, ' '), 20, '', 1, @now, @now),(NULL, @dataAgentId, '设置节点调度', 'dataAgentDispatch', '', '', 3, '', '/dataAgent/dispatch', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataAgentId, ' '), 30, '', 1, @now, @now),(NULL, @dataAgentId, '拒绝/吊销节点', 'dataAgentReject', '', '', 3, '', '/dataAgent/reject', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataAgentId, ' '), 40, '', 1, @now, @now);
+
+-- 节点管理默认授权给超级管理员角色
+INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
+SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataAgent', 'dataAgentList', 'dataAgentApprove', 'dataAgentDispatch', 'dataAgentReject');
 
 COMMIT;

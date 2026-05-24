@@ -12,7 +12,7 @@
 
 ## 表结构职责
 
-当前第一版保留 5 张表。
+当前第一版保留 6 张表。
 
 ### `hg_data_connector`
 
@@ -217,6 +217,57 @@ clean_failed_count = clean_failed_count + incoming.clean_failed_count
 dropped_count = dropped_count + incoming.dropped_count
 last_error = incoming.last_error
 error_samples = 合并后最多保留 10 条
+```
+
+### `hg_data_agent`
+
+Agent 节点管理表，用于记录 Agent 注册审批、调度开关、展示信息和最近心跳时间。它不是 Agent 运行明细表，不保存字段采集明细、任务执行明细或每次心跳历史。
+
+当前只保留管理和调度决策需要的字段：
+
+- `agent_id`：Agent 唯一标识，必须唯一。
+- `name`：节点名称，供后台展示和人工备注；为空时可直接展示 `agent_id`。
+- `hostname`：Agent 所在主机名，由 Agent 上报。
+- `version`：Agent 版本，由 Agent 上报。
+- `agent_ip`：Agent 上报的 IP 列表，使用 JSON 保存。
+- `register_status`：注册状态，取值为 `pending`、`approved`、`rejected`、`revoked`。
+- `dispatch_status`：调度状态，取值为 `enabled`、`disabled`。
+- `last_seen_at`：最近心跳时间，用于动态计算在线状态。
+- `approved_by`：批准人。
+- `approved_at`：批准时间。
+- `disabled_at`：禁用、拒绝或吊销时间。
+- `remark`：备注。
+- `created_at` / `updated_at`：创建和更新时间。
+
+在线状态不落库。后端按如下规则动态计算：
+
+```text
+last_seen_at >= 当前时间 - 2分钟 => online
+否则 => offline
+```
+
+当前明确不放入 `hg_data_agent` 的字段：
+
+- `certificate_fingerprint`
+- `certificate_pem`
+- `allowed_ip_cidrs`
+- `capabilities`
+- `total_slots`
+- `available_slots`
+- `online_status`
+
+原因：
+
+- 证书和 mTLS 相关字段第一期未启用，提前落库会增加维护成本。
+- 能力和 slot 暂时不参与 HotGo 当前调度决策。
+- `online_status` 可以由 `last_seen_at` 计算，落库会带来状态同步问题。
+
+第一期只建 `hg_data_agent` 一张节点表，不单独建 heartbeat 历史表。Agent 心跳上报时直接更新 `hostname`、`version`、`agent_ip`、`last_seen_at` 和 `updated_at`。如果后续需要查询心跳历史或调试 Agent 运行抖动，再新增独立的心跳日志/聚合表。
+
+表结构 SQL 和其他数据集成表、菜单数据一起放在：
+
+```text
+server/storage/data/data.sql
 ```
 
 ## 字段采集策略

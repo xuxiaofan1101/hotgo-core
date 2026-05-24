@@ -171,6 +171,18 @@ type (
 		// Switch 更新CURD列表开关
 		Switch(ctx context.Context, in *sysin.CurdDemoSwitchInp) (err error)
 	}
+	ISysDataAgent interface {
+		// Model Agent节点ORM模型
+		Model(ctx context.Context, option ...*handler.Option) *gdb.Model
+		// List 获取Agent节点列表
+		List(ctx context.Context, in *sysin.DataAgentListInp) (list []*sysin.DataAgentListModel, totalCount int, err error)
+		// Approve 批准Agent注册
+		Approve(ctx context.Context, in *sysin.DataAgentApproveInp) (err error)
+		// Dispatch 设置Agent调度状态
+		Dispatch(ctx context.Context, in *sysin.DataAgentDispatchInp) (err error)
+		// Reject 拒绝或吊销Agent
+		Reject(ctx context.Context, in *sysin.DataAgentRejectInp) (err error)
+	}
 	ISysDataConnector interface {
 		// Model 数据源ORM模型
 		Model(ctx context.Context, option ...*handler.Option) *gdb.Model
@@ -466,6 +478,7 @@ var (
 	localSysCron              ISysCron
 	localSysCronGroup         ISysCronGroup
 	localSysCurdDemo          ISysCurdDemo
+	localSysDataAgent         ISysDataAgent
 	localSysDataClean         ISysDataClean
 	localSysDataConnector     ISysDataConnector
 	localSysDataFieldTemplate ISysDataFieldTemplate
@@ -570,6 +583,17 @@ func SysCurdDemo() ISysCurdDemo {
 
 func RegisterSysCurdDemo(i ISysCurdDemo) {
 	localSysCurdDemo = i
+}
+
+func SysDataAgent() ISysDataAgent {
+	if localSysDataAgent == nil {
+		panic("implement not found for interface ISysDataAgent, forgot register?")
+	}
+	return localSysDataAgent
+}
+
+func RegisterSysDataAgent(i ISysDataAgent) {
+	localSysDataAgent = i
 }
 
 func SysDataConnector() ISysDataConnector {
