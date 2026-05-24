@@ -169,12 +169,15 @@
 
               <template v-else-if="formValue.connectorType === 's3'">
                 <n-gi>
-                  <n-form-item label="Endpoint" required>
-                    <n-input v-model:value="configForm.endpoint" />
+                  <n-form-item label="Endpoint">
+                    <n-input
+                      v-model:value="configForm.endpoint"
+                      placeholder="可选，S3 兼容服务再填写"
+                    />
                   </n-form-item>
                 </n-gi>
                 <n-gi>
-                  <n-form-item label="Region">
+                  <n-form-item label="Region" required>
                     <n-input v-model:value="configForm.region" />
                   </n-form-item>
                 </n-gi>
@@ -468,7 +471,7 @@
     clientCert: '',
     clientKey: '',
     description: '',
-    endpoint: 'https://s3.example.com',
+    endpoint: '',
     hecUrl: 'https://splunk.example.com:8088/services/collector/event',
     insecureSkipVerify: false,
     level: 'warning',
@@ -582,7 +585,7 @@
       clientCert: config.clientCert ?? '',
       clientKey: config.clientKey ?? '',
       description: config.description ?? '',
-      endpoint: config.endpoint ?? 'https://s3.example.com',
+      endpoint: config.endpoint ?? '',
       hecUrl:
         config.hecUrl ?? config.url ?? 'https://splunk.example.com:8088/services/collector/event',
       insecureSkipVerify: Boolean(config.insecureSkipVerify),
@@ -704,8 +707,8 @@
       message.error('请填写 Kafka Token');
       return false;
     }
-    if (formValue.value.connectorType === 's3' && !configForm.endpoint) {
-      message.error('请填写 S3 Endpoint');
+    if (formValue.value.connectorType === 's3' && !configForm.region) {
+      message.error('请填写 S3 Region');
       return false;
     }
     if (formValue.value.connectorType === 's3' && configForm.credentialMode === 'static') {

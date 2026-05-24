@@ -150,8 +150,7 @@ CREATE TABLE IF NOT EXISTS `hg_data_clean_stat` (
 -- --------------------------------------------------------
 
 --
--- 数据集成菜单权限
--- 可重复执行：以 hg_admin_menu.name 做忽略插入，并为 superadmin 写入菜单授权。
+-- 数据源菜单权限，可独立执行
 --
 
 SET @now := NOW();
@@ -170,12 +169,72 @@ INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`
 
 SET @dataConnectorId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataConnector' LIMIT 1);
 
--- 按钮权限
+-- 数据源按钮权限
 INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
 (NULL, @dataConnectorId, '数据源详情', 'dataConnectorView', '', '', 3, '', '/dataConnector/view', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 10, '', 1, @now, @now),(NULL, @dataConnectorId, '新增/编辑数据源', 'dataConnectorEdit', '', '', 3, '', '/dataConnector/edit', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 20, '', 1, @now, @now),(NULL, @dataConnectorId, '删除数据源', 'dataConnectorDelete', '', '', 3, '', '/dataConnector/delete', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 30, '', 1, @now, @now),(NULL, @dataConnectorId, '更新数据源状态', 'dataConnectorStatus', '', '', 3, '', '/dataConnector/status', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 40, '', 1, @now, @now),(NULL, @dataConnectorId, '测试数据源配置', 'dataConnectorTest', '', '', 3, '', '/dataConnector/test', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataConnectorId, ' '), 50, '', 1, @now, @now);
 
--- 默认授权给超级管理员角色
+-- 数据源默认授权给超级管理员角色
 INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
 SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataConnector', 'dataConnectorView', 'dataConnectorEdit', 'dataConnectorDelete', 'dataConnectorStatus', 'dataConnectorTest');
+
+COMMIT;
+
+--
+-- 数据清洗菜单权限，可独立执行
+--
+
+SET @now := NOW();
+
+START TRANSACTION;
+
+-- 一级目录：数据集成
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, 0, '数据集成', 'dataIntegration', '/dataIntegration', 'DatabaseOutlined', 1, '/dataIntegration/dataConnector', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 1, '', 220, '', 1, @now, @now);
+
+SET @dataIntegrationId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataIntegration' LIMIT 1);
+
+-- 二级菜单：数据清洗
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataIntegrationId, '数据清洗', 'dataClean', 'dataClean', '', 2, '', '/dataClean/list', '', '/dataClean/index', 1, '', 0, 0, '', 0, 0, 0, 2, CONCAT('tr_', @dataIntegrationId, ' '), 20, '', 1, @now, @now);
+
+SET @dataCleanId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataClean' LIMIT 1);
+
+-- 数据清洗按钮权限
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataCleanId, '数据清洗详情', 'dataCleanView', '', '', 3, '', '/dataClean/view', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 10, '', 1, @now, @now),(NULL, @dataCleanId, '新增/编辑数据清洗', 'dataCleanEdit', '', '', 3, '', '/dataClean/edit', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 20, '', 1, @now, @now),(NULL, @dataCleanId, '删除数据清洗', 'dataCleanDelete', '', '', 3, '', '/dataClean/delete', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 30, '', 1, @now, @now),(NULL, @dataCleanId, '更新数据清洗状态', 'dataCleanStatus', '', '', 3, '', '/dataClean/status', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 40, '', 1, @now, @now),(NULL, @dataCleanId, '测试数据清洗配置', 'dataCleanTest', '', '', 3, '', '/dataClean/test', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 50, '', 1, @now, @now),(NULL, @dataCleanId, '采样数据清洗字段', 'dataCleanSample', '', '', 3, '', '/dataClean/sample', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 60, '', 1, @now, @now),(NULL, @dataCleanId, '获取采集字段', 'dataCleanFieldList', '', '', 3, '', '/dataClean/fieldList', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataCleanId, ' '), 70, '', 1, @now, @now);
+
+-- 数据清洗默认授权给超级管理员角色
+INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
+SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataClean', 'dataCleanView', 'dataCleanEdit', 'dataCleanDelete', 'dataCleanStatus', 'dataCleanTest', 'dataCleanSample', 'dataCleanFieldList');
+
+COMMIT;
+
+--
+-- 字段模板菜单权限，可独立执行
+--
+
+SET @now := NOW();
+
+START TRANSACTION;
+
+-- 一级目录：数据集成
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, 0, '数据集成', 'dataIntegration', '/dataIntegration', 'DatabaseOutlined', 1, '/dataIntegration/dataConnector', '', '', 'LAYOUT', 1, '', 0, 0, '', 0, 0, 0, 1, '', 220, '', 1, @now, @now);
+
+SET @dataIntegrationId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataIntegration' LIMIT 1);
+
+-- 二级菜单：字段模板
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataIntegrationId, '字段模板', 'dataFieldTemplate', 'dataFieldTemplate', '', 2, '', '/dataFieldTemplate/list', '', '/dataFieldTemplate/index', 1, '', 0, 0, '', 0, 0, 0, 2, CONCAT('tr_', @dataIntegrationId, ' '), 30, '', 1, @now, @now);
+
+SET @dataFieldTemplateId := (SELECT `id` FROM `hg_admin_menu` WHERE `name` = 'dataFieldTemplate' LIMIT 1);
+
+-- 字段模板按钮权限
+INSERT IGNORE INTO `hg_admin_menu` (`id`, `pid`, `title`, `name`, `path`, `icon`, `type`, `redirect`, `permissions`, `permission_name`, `component`, `always_show`, `active_menu`, `is_root`, `is_frame`, `frame_src`, `keep_alive`, `hidden`, `affix`, `level`, `tree`, `sort`, `remark`, `status`, `created_at`, `updated_at`) VALUES
+(NULL, @dataFieldTemplateId, '字段模板详情', 'dataFieldTemplateView', '', '', 3, '', '/dataFieldTemplate/view', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataFieldTemplateId, ' '), 10, '', 1, @now, @now),(NULL, @dataFieldTemplateId, '新增/编辑字段模板', 'dataFieldTemplateEdit', '', '', 3, '', '/dataFieldTemplate/edit', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataFieldTemplateId, ' '), 20, '', 1, @now, @now),(NULL, @dataFieldTemplateId, '删除字段模板', 'dataFieldTemplateDelete', '', '', 3, '', '/dataFieldTemplate/delete', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataFieldTemplateId, ' '), 30, '', 1, @now, @now),(NULL, @dataFieldTemplateId, '更新字段模板状态', 'dataFieldTemplateStatus', '', '', 3, '', '/dataFieldTemplate/status', '', '', 1, '', 0, 0, '', 0, 1, 0, 3, CONCAT('tr_', @dataIntegrationId, ' tr_', @dataFieldTemplateId, ' '), 40, '', 1, @now, @now);
+
+-- 字段模板默认授权给超级管理员角色
+INSERT IGNORE INTO `hg_admin_role_menu` (`role_id`, `menu_id`)
+SELECT r.`id`, m.`id` FROM `hg_admin_role` r JOIN `hg_admin_menu` m WHERE r.`key` = 'superadmin' AND m.`name` IN ('dataIntegration', 'dataFieldTemplate', 'dataFieldTemplateView', 'dataFieldTemplateEdit', 'dataFieldTemplateDelete', 'dataFieldTemplateStatus');
 
 COMMIT;

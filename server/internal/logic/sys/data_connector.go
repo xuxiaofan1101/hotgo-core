@@ -210,8 +210,8 @@ func validateConnectorConfig(direction, connectorType string, config *gjson.Json
 	}
 
 	if connectorType == "s3" {
-		if connectorConfigString(config, "endpoint") == "" {
-			return gerror.New("请填写 S3 Endpoint")
+		if connectorConfigString(config, "region") == "" {
+			return gerror.New("请填写 S3 Region")
 		}
 		if connectorConfigString(config, "credentialMode") == "static" &&
 			(connectorConfigString(config, "accessKey") == "" || connectorConfigString(config, "secretKey") == "") {

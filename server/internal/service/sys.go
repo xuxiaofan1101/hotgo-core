@@ -187,6 +187,42 @@ type (
 		// Test 测试数据源配置
 		Test(ctx context.Context, in *sysin.DataConnectorTestInp) (res *sysin.DataConnectorTestModel, err error)
 	}
+	ISysDataClean interface {
+		// Model 数据清洗任务ORM模型
+		Model(ctx context.Context, option ...*handler.Option) *gdb.Model
+		// FieldModel 数据字段ORM模型
+		FieldModel(ctx context.Context, option ...*handler.Option) *gdb.Model
+		// List 获取数据清洗任务列表
+		List(ctx context.Context, in *sysin.DataCleanTaskListInp) (list []*sysin.DataCleanTaskListModel, totalCount int, err error)
+		// Edit 修改/新增数据清洗任务
+		Edit(ctx context.Context, in *sysin.DataCleanTaskEditInp) (err error)
+		// Delete 删除数据清洗任务
+		Delete(ctx context.Context, in *sysin.DataCleanTaskDeleteInp) (err error)
+		// View 获取数据清洗任务指定信息
+		View(ctx context.Context, in *sysin.DataCleanTaskViewInp) (res *sysin.DataCleanTaskViewModel, err error)
+		// Status 更新数据清洗任务状态
+		Status(ctx context.Context, in *sysin.DataCleanTaskStatusInp) (err error)
+		// Test 测试数据清洗任务配置
+		Test(ctx context.Context, in *sysin.DataCleanTaskTestInp) (res *sysin.DataCleanTaskTestModel, err error)
+		// Sample 采样数据清洗字段
+		Sample(ctx context.Context, in *sysin.DataCleanTaskSampleInp) (res *sysin.DataCleanTaskSampleModel, err error)
+		// FieldList 获取任务字段列表
+		FieldList(ctx context.Context, in *sysin.DataFieldListInp) (list []*sysin.DataFieldListModel, total int, err error)
+	}
+	ISysDataFieldTemplate interface {
+		// Model 字段模板ORM模型
+		Model(ctx context.Context, option ...*handler.Option) *gdb.Model
+		// List 获取字段模板列表
+		List(ctx context.Context, in *sysin.DataFieldTemplateListInp) (list []*sysin.DataFieldTemplateListModel, totalCount int, err error)
+		// Edit 修改/新增字段模板
+		Edit(ctx context.Context, in *sysin.DataFieldTemplateEditInp) (err error)
+		// Delete 删除字段模板
+		Delete(ctx context.Context, in *sysin.DataFieldTemplateDeleteInp) (err error)
+		// View 获取字段模板指定信息
+		View(ctx context.Context, in *sysin.DataFieldTemplateViewInp) (res *sysin.DataFieldTemplateViewModel, err error)
+		// Status 更新字段模板状态
+		Status(ctx context.Context, in *sysin.DataFieldTemplateStatusInp) (err error)
+	}
 	ISysDictData interface {
 		// Delete 删除
 		Delete(ctx context.Context, in *sysin.DictDataDeleteInp) error
@@ -422,28 +458,30 @@ type (
 )
 
 var (
-	localSysAddons         ISysAddons
-	localSysAddonsConfig   ISysAddonsConfig
-	localSysAttachment     ISysAttachment
-	localSysBlacklist      ISysBlacklist
-	localSysConfig         ISysConfig
-	localSysCron           ISysCron
-	localSysCronGroup      ISysCronGroup
-	localSysCurdDemo       ISysCurdDemo
-	localSysDataConnector  ISysDataConnector
-	localSysDictData       ISysDictData
-	localSysDictType       ISysDictType
-	localSysEmsLog         ISysEmsLog
-	localSysGenCodes       ISysGenCodes
-	localSysLog            ISysLog
-	localSysLoginLog       ISysLoginLog
-	localSysNormalTreeDemo ISysNormalTreeDemo
-	localSysOptionTreeDemo ISysOptionTreeDemo
-	localSysProvinces      ISysProvinces
-	localSysServeLicense   ISysServeLicense
-	localSysServeLog       ISysServeLog
-	localSysSmsLog         ISysSmsLog
-	localSysTestCategory   ISysTestCategory
+	localSysAddons            ISysAddons
+	localSysAddonsConfig      ISysAddonsConfig
+	localSysAttachment        ISysAttachment
+	localSysBlacklist         ISysBlacklist
+	localSysConfig            ISysConfig
+	localSysCron              ISysCron
+	localSysCronGroup         ISysCronGroup
+	localSysCurdDemo          ISysCurdDemo
+	localSysDataClean         ISysDataClean
+	localSysDataConnector     ISysDataConnector
+	localSysDataFieldTemplate ISysDataFieldTemplate
+	localSysDictData          ISysDictData
+	localSysDictType          ISysDictType
+	localSysEmsLog            ISysEmsLog
+	localSysGenCodes          ISysGenCodes
+	localSysLog               ISysLog
+	localSysLoginLog          ISysLoginLog
+	localSysNormalTreeDemo    ISysNormalTreeDemo
+	localSysOptionTreeDemo    ISysOptionTreeDemo
+	localSysProvinces         ISysProvinces
+	localSysServeLicense      ISysServeLicense
+	localSysServeLog          ISysServeLog
+	localSysSmsLog            ISysSmsLog
+	localSysTestCategory      ISysTestCategory
 )
 
 func SysAddons() ISysAddons {
@@ -543,6 +581,28 @@ func SysDataConnector() ISysDataConnector {
 
 func RegisterSysDataConnector(i ISysDataConnector) {
 	localSysDataConnector = i
+}
+
+func SysDataClean() ISysDataClean {
+	if localSysDataClean == nil {
+		panic("implement not found for interface ISysDataClean, forgot register?")
+	}
+	return localSysDataClean
+}
+
+func RegisterSysDataClean(i ISysDataClean) {
+	localSysDataClean = i
+}
+
+func SysDataFieldTemplate() ISysDataFieldTemplate {
+	if localSysDataFieldTemplate == nil {
+		panic("implement not found for interface ISysDataFieldTemplate, forgot register?")
+	}
+	return localSysDataFieldTemplate
+}
+
+func RegisterSysDataFieldTemplate(i ISysDataFieldTemplate) {
+	localSysDataFieldTemplate = i
 }
 
 func SysDictData() ISysDictData {
