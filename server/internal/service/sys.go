@@ -182,6 +182,8 @@ type (
 		Dispatch(ctx context.Context, in *sysin.DataAgentDispatchInp) (err error)
 		// Reject 拒绝或吊销Agent
 		Reject(ctx context.Context, in *sysin.DataAgentRejectInp) (err error)
+		// HandleAgentEnvelope 处理Agent上报消息
+		HandleAgentEnvelope(ctx context.Context, envelope sysin.DataAgentEnvelope) (res sysin.DataAgentEnvelope, err error)
 	}
 	ISysDataConnector interface {
 		// Model 数据源ORM模型

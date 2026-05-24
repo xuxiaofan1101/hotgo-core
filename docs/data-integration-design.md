@@ -270,6 +270,24 @@ last_seen_at >= 当前时间 - 2分钟 => online
 server/storage/data/data.sql
 ```
 
+Agent 和 server 的第一期通信使用 WebSocket：
+
+```text
+GET /api/v1/data-integration/agent/ws
+GET /api/data-integration/agent/ws
+```
+
+`/api/v1` 用于兼容 vogo 迁移过来的 agent 默认配置，`/api` 用于对齐 HotGo 当前 API 前缀。
+
+第一期 server 处理以下消息：
+
+- `agent.hello`：Agent 启动后上报 `agentId`、主机名、版本和 IP，server 写入或更新 `hg_data_agent`。新 Agent 默认 `pending` + `disabled`，需要后台批准后才允许调度。
+- `agent.heartbeat`：更新 `hg_data_agent.last_seen_at` 和 IP 列表。在线状态仍然不落库，后台按 `last_seen_at` 动态计算。
+- `agent.fields.report`：把 Agent 上报的新字段合并到 `hg_data_field`，供清洗配置页面选择字段。
+- `agent.stats.report`：把 Agent 本地聚合后的分钟级统计合并到 `hg_data_clean_stat`。
+
+当前 server 先只做接入、心跳、字段和统计落库，不主动下发任务配置。后续需要调度任务时，再在这个 WebSocket 通道上补 `server.task.config` 和 `server.task.stop`。
+
 ## 字段采集策略
 
 字段采集默认开启，和数据清洗开关解耦：

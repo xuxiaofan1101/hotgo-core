@@ -62,7 +62,7 @@ func LoadConfigFromFile(path string) (Config, error) {
 		Slots:        raw.Agent.Slots,
 	}
 	if config.ServerURL == "" {
-		config.ServerURL = "ws://127.0.0.1:8888/api/v1/data-integration/agent/ws"
+		config.ServerURL = "ws://127.0.0.1:8000/api/v1/data-integration/agent/ws"
 	}
 	if config.Slots <= 0 {
 		config.Slots = 4

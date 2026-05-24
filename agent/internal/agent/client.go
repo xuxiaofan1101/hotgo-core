@@ -3,6 +3,7 @@ package agent
 import (
 	"context"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -49,6 +50,7 @@ func (c *Client) Run(ctx context.Context) error {
 		return fmt.Errorf("连接 rule server 失败: %w", err)
 	}
 	defer conn.Close()
+	log.Printf("agent connected server=%s agentId=%s", c.config.ServerURL, c.config.AgentId)
 	var writeMu sync.Mutex
 	writeJSON := func(payload any) error {
 		writeMu.Lock()
@@ -72,6 +74,7 @@ func (c *Client) Run(ctx context.Context) error {
 	)); err != nil {
 		return fmt.Errorf("发送 agent hello 失败: %w", err)
 	}
+	log.Printf("agent hello sent agentId=%s hostname=%s", c.config.AgentId, c.config.Hostname)
 
 	readErr := make(chan error, 1)
 	go func() {

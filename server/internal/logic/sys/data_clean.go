@@ -308,7 +308,9 @@ func (s *sSysDataClean) upsertDataFields(ctx context.Context, taskId int64, conn
 			Where(cols.TaskId, taskId).
 			Where(cols.FieldPath, profile.FieldPath).
 			Scan(&existing); err != nil {
-			return err
+			if !isSqlNoRows(err) {
+				return err
+			}
 		}
 		if existing.Id > 0 {
 			if _, err := dao.DataField.Ctx(ctx).WherePri(existing.Id).Data(do.DataField{

@@ -8,6 +8,7 @@ package router
 import (
 	"context"
 	"hotgo/internal/consts"
+	dataintegration "hotgo/internal/controller/api/dataintegration"
 	"hotgo/internal/controller/api/member"
 	"hotgo/internal/controller/api/pay"
 	"hotgo/internal/service"
@@ -19,6 +20,8 @@ import (
 // Api 前台路由
 func Api(ctx context.Context, group *ghttp.RouterGroup) {
 	group.Group(simple.RouterPrefix(ctx, consts.AppApi), func(group *ghttp.RouterGroup) {
+		group.GET("/v1/data-integration/agent/ws", dataintegration.Agent.ServeWebSocket)
+		group.GET("/data-integration/agent/ws", dataintegration.Agent.ServeWebSocket)
 		group.Bind(
 			pay.NewV1(), // 支付异步通知
 		)

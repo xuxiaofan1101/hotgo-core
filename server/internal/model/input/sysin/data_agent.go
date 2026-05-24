@@ -2,6 +2,8 @@ package sysin
 
 import (
 	"context"
+	"encoding/json"
+	"time"
 
 	"hotgo/internal/consts"
 	"hotgo/internal/model/input/form"
@@ -91,3 +93,86 @@ func (in *DataAgentRejectInp) Filter(ctx context.Context) (err error) {
 }
 
 type DataAgentRejectModel struct{}
+
+const (
+	DataAgentProtocolVersion = "v1"
+
+	DataAgentMessageHello        = "agent.hello"
+	DataAgentMessageHeartbeat    = "agent.heartbeat"
+	DataAgentMessageFieldsReport = "agent.fields.report"
+	DataAgentMessageStatsReport  = "agent.stats.report"
+	DataAgentMessageError        = "agent.error"
+
+	DataAgentMessageHelloAck     = "server.hello_ack"
+	DataAgentMessageHeartbeatAck = "server.heartbeat_ack"
+	DataAgentMessageFieldsAck    = "server.fields_ack"
+	DataAgentMessageAck          = "server.ack"
+	DataAgentMessageServerError  = "server.error"
+)
+
+type DataAgentEnvelope struct {
+	Type      string          `json:"type"`
+	RequestId string          `json:"requestId,omitempty"`
+	SentAt    time.Time       `json:"sentAt,omitempty"`
+	Payload   json.RawMessage `json:"payload,omitempty"`
+}
+
+type DataAgentSlotStatus struct {
+	Total     int `json:"total"`
+	Available int `json:"available"`
+}
+
+type DataAgentRuntimeMetrics struct {
+	RunningShards int     `json:"runningShards"`
+	ReadTps       float64 `json:"readTps"`
+	CleanTps      float64 `json:"cleanTps"`
+	OutputTps     float64 `json:"outputTps"`
+}
+
+type DataAgentHelloPayload struct {
+	AgentId      string              `json:"agentId"`
+	Hostname     string              `json:"hostname"`
+	Capabilities []string            `json:"capabilities"`
+	AgentIp      []string            `json:"agentIp"`
+	Slots        DataAgentSlotStatus `json:"slots"`
+	Version      string              `json:"version"`
+}
+
+type DataAgentHeartbeatPayload struct {
+	AgentId string                  `json:"agentId"`
+	AgentIp []string                `json:"agentIp"`
+	Slots   DataAgentSlotStatus     `json:"slots"`
+	Metrics DataAgentRuntimeMetrics `json:"metrics"`
+	Time    time.Time               `json:"time"`
+}
+
+type DataAgentFieldSample struct {
+	Path      string `json:"path"`
+	Type      string `json:"type"`
+	Sample    string `json:"sample"`
+	Hash      string `json:"hash"`
+	Count     int64  `json:"count"`
+	NullCount int64  `json:"nullCount"`
+}
+
+type DataAgentFieldsReportPayload struct {
+	TenantId string                 `json:"tenantId"`
+	TaskId   int64                  `json:"taskId"`
+	AgentId  string                 `json:"agentId"`
+	Fields   []DataAgentFieldSample `json:"fields"`
+}
+
+type DataAgentStatsReportPayload struct {
+	AgentId     string                 `json:"agentId"`
+	WindowStart time.Time              `json:"windowStart"`
+	WindowEnd   time.Time              `json:"windowEnd"`
+	Metrics     []DataAgentStatsMetric `json:"metrics"`
+}
+
+type DataAgentStatsMetric struct {
+	TenantId string `json:"tenantId"`
+	TaskId   int64  `json:"taskId"`
+	Name     string `json:"name"`
+	GroupKey string `json:"groupKey,omitempty"`
+	Value    int64  `json:"value"`
+}

@@ -1,7 +1,7 @@
 agent:
   # 留空时会根据本机 machine-id/硬件 MAC 自动计算稳定 Agent ID。
   id: ""
-  serverUrl: "ws://127.0.0.1:8888/api/v1/data-integration/agent/ws"
+  serverUrl: "ws://127.0.0.1:8000/api/v1/data-integration/agent/ws"
   hostname: ""
   capabilities:
     - kafka
