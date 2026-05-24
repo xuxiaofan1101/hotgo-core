@@ -8,3 +8,4 @@ push.sh
 /docker/apollo/data
 /docker/mysql/data
 /docker/redis/data
+/docker/kafka/*/data

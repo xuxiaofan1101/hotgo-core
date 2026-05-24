@@ -18,6 +18,8 @@ services:
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
       KAFKA_CFG_SASL_ENABLED_MECHANISMS: "PLAIN"
       KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: "PLAIN"
+      KAFKA_CFG_LISTENER_NAME_INTERNAL_PLAIN_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin-secret" user_admin="admin-secret" user_hotgo="hotgo-secret";'
+      KAFKA_CFG_LISTENER_NAME_EXTERNAL_PLAIN_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin-secret" user_admin="admin-secret" user_hotgo="hotgo-secret";'
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_server_jaas.conf"
       ALLOW_PLAINTEXT_LISTENER: "yes"

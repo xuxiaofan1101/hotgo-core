@@ -11,6 +11,7 @@
 | `oauthbearer`        | `localhost:19096` | SASL/OAUTHBEARER，本地 unsecured token |
 | `tls`                | `localhost:19097` | TLS 加密，不要求客户端证书             |
 | `mtls`               | `localhost:19098` | mTLS，要求客户端证书                   |
+| `kafka-ui`           | `localhost:18080` | Kafka UI，默认连接 sasl-plain 环境     |
 
 默认账号：
 
@@ -40,6 +41,18 @@ bash generate-certs.sh
 cd docker/kafka/tls
 docker compose up -d
 ```
+
+Kafka UI 默认连接 `sasl-plain` 里的 Kafka 内部监听地址，并使用管理账号 `admin` / `admin-secret`。先启动 sasl-plain Kafka，再启动 UI：
+
+```bash
+cd docker/kafka/sasl-plain
+docker compose up -d
+
+cd ../kafka-ui
+docker compose up -d
+```
+
+访问 `http://localhost:18080`。如果要连接其他认证方式的 Kafka，需要同步调整 `kafka-ui/docker-compose.yaml` 里的外部网络、`KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS` 和认证属性。
 
 SCRAM 说明：`sasl-scram-sha-256` 和 `sasl-scram-sha-512` 使用 ZooKeeper 模式启动，并在 broker 启动前写入 SCRAM 用户凭据，避免 KRaft 本地初始化 SCRAM 用户不完整导致认证失败。
 
