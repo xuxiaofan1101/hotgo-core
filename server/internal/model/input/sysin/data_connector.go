@@ -194,3 +194,19 @@ type DataConnectorTestModel struct {
 	Success bool   `json:"success" dc:"是否成功"`
 	Message string `json:"message" dc:"测试结果"`
 }
+
+// DataConnectorKafkaTopicsInp 获取Kafka Topic列表
+type DataConnectorKafkaTopicsInp struct {
+	Id int64 `json:"id" v:"required#连接ID不能为空" dc:"连接ID"`
+}
+
+func (in *DataConnectorKafkaTopicsInp) Filter(ctx context.Context) (err error) {
+	if in.Id <= 0 {
+		return gerror.New("连接ID不能为空")
+	}
+	return
+}
+
+type DataConnectorKafkaTopicsModel struct {
+	Topics []string `json:"topics" dc:"Topic列表"`
+}

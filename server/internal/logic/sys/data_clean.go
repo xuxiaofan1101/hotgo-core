@@ -2,7 +2,9 @@ package sys
 
 import (
 	"context"
+	"sort"
 	"strings"
+	"time"
 
 	"hotgo/internal/consts"
 	"hotgo/internal/dao"
@@ -14,11 +16,13 @@ import (
 	"hotgo/internal/model/input/sysin"
 	"hotgo/internal/service"
 
+	"github.com/IBM/sarama"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type sSysDataClean struct{}
@@ -201,28 +205,33 @@ func (s *sSysDataClean) Test(ctx context.Context, in *sysin.DataCleanTaskTestInp
 }
 
 func (s *sSysDataClean) Sample(ctx context.Context, in *sysin.DataCleanTaskSampleInp) (res *sysin.DataCleanTaskSampleModel, err error) {
-	if _, err = s.getSourceConnector(ctx, in.SourceId); err != nil {
+	source, err := s.getSourceConnector(ctx, in.SourceId)
+	if err != nil {
 		return nil, err
 	}
 	payload := strings.TrimSpace(in.Payload)
 	if payload == "" && in.SourceConfig != nil {
 		payload = strings.TrimSpace(in.SourceConfig.Get("samplePayload").String())
 	}
-	if payload == "" {
-		return nil, gerror.New("请粘贴样例数据，或等待 Agent 上报字段后刷新采集字段")
-	}
-	payloads, err := parseDataCleanPayloads(payload)
-	if err != nil {
-		return nil, err
+	var payloads []map[string]interface{}
+	if payload != "" {
+		payloads, err = parseDataCleanPayloads(payload)
+		if err != nil {
+			return nil, err
+		}
+		payloads = limitDataCleanSamplePayloads(payloads, in.Limit)
+	} else {
+		config := mergeDataCleanSourceConfig(source.Config, in.SourceConfig)
+		payloads, err = sampleDataCleanSourcePayloads(ctx, source.ConnectorType, config, in.Limit, time.Duration(in.TimeoutSeconds)*time.Second)
+		if err != nil {
+			return nil, err
+		}
 	}
 	parseDepth := 0
 	if in.CleanConfig != nil {
 		parseDepth = in.CleanConfig.Get("parseDepth").Int()
 	}
 	profiles := profileDataFields(payloads, parseDepth)
-	if len(profiles) > in.Limit {
-		profiles = profiles[:in.Limit]
-	}
 	if in.Id > 0 && len(profiles) > 0 {
 		if err = s.upsertDataFields(ctx, in.Id, in.SourceId, profiles); err != nil {
 			return nil, err
@@ -233,6 +242,102 @@ func (s *sSysDataClean) Sample(ctx context.Context, in *sysin.DataCleanTaskSampl
 		list = append(list, dataFieldProfileToModel(in.Id, in.SourceId, profile))
 	}
 	return &sysin.DataCleanTaskSampleModel{List: list, Total: len(list)}, nil
+}
+
+func sampleDataCleanSourcePayloads(ctx context.Context, sourceType string, config map[string]interface{}, limit int, timeout time.Duration) ([]map[string]interface{}, error) {
+	switch sourceType {
+	case consts.DataConnectorTypeKafka:
+		return sampleDataCleanKafkaPayloads(ctx, config, limit, timeout)
+	default:
+		return nil, gerror.New("当前数据源类型暂不支持主动采样，请粘贴样例数据")
+	}
+}
+
+func sampleDataCleanKafkaPayloads(ctx context.Context, config map[string]interface{}, limit int, timeout time.Duration) ([]map[string]interface{}, error) {
+	brokers := dataConnectorKafkaStringSlice(config, "brokers")
+	topic := dataConnectorKafkaString(config, "topic")
+	if len(brokers) == 0 || topic == "" {
+		return nil, gerror.New("Kafka 采样需要配置 Brokers 和 Topic")
+	}
+	kafkaConfig, err := buildDataConnectorKafkaConfig(config)
+	if err != nil {
+		return nil, gerror.Wrap(err, "Kafka配置无效")
+	}
+	kafkaConfig.Consumer.Return.Errors = true
+	consumer, err := sarama.NewConsumer(brokers, kafkaConfig)
+	if err != nil {
+		return nil, gerror.Wrap(err, "连接Kafka失败")
+	}
+	defer consumer.Close()
+
+	partitions, err := consumer.Partitions(topic)
+	if err != nil {
+		return nil, gerror.Wrap(err, "读取Kafka分区失败")
+	}
+	sort.Slice(partitions, func(i, j int) bool { return partitions[i] < partitions[j] })
+
+	deadline := time.NewTimer(timeout)
+	defer deadline.Stop()
+	payloads := make([]map[string]interface{}, 0, limit)
+	for _, partition := range partitions {
+		if len(payloads) >= limit {
+			break
+		}
+		offset := dataCleanKafkaSampleStartOffset(config, partition)
+		partitionConsumer, err := consumer.ConsumePartition(topic, partition, offset)
+		if err != nil {
+			return nil, gerror.Wrap(err, "消费Kafka分区失败")
+		}
+		for len(payloads) < limit {
+			select {
+			case <-ctx.Done():
+				partitionConsumer.Close()
+				return payloads, ctx.Err()
+			case <-deadline.C:
+				partitionConsumer.Close()
+				return payloads, nil
+			case err := <-partitionConsumer.Errors():
+				partitionConsumer.Close()
+				if err == nil {
+					return payloads, nil
+				}
+				return payloads, err
+			case msg := <-partitionConsumer.Messages():
+				if msg == nil {
+					partitionConsumer.Close()
+					goto nextPartition
+				}
+				parsed, err := parseDataCleanPayloads(string(msg.Value))
+				if err != nil {
+					partitionConsumer.Close()
+					return nil, err
+				}
+				payloads = appendDataCleanSamplePayloads(payloads, parsed, limit)
+			}
+		}
+		partitionConsumer.Close()
+	nextPartition:
+	}
+	return payloads, nil
+}
+
+func dataCleanKafkaSampleStartOffset(config map[string]interface{}, partition int32) int64 {
+	mode := strings.ToLower(strings.TrimSpace(dataConnectorKafkaString(config, "sampleMode")))
+	if mode == "" {
+		mode = "latest"
+	}
+	switch mode {
+	case "latest":
+		return sarama.OffsetNewest
+	case "specific", "offset":
+		offsets := gconv.Map(config["partitionOffsets"])
+		if value, ok := offsets[gconv.String(partition)]; ok {
+			return gconv.Int64(value)
+		}
+		return gconv.Int64(config["startOffset"])
+	default:
+		return sarama.OffsetOldest
+	}
 }
 
 func (s *sSysDataClean) FieldList(ctx context.Context, in *sysin.DataFieldListInp) (list []*sysin.DataFieldListModel, total int, err error) {

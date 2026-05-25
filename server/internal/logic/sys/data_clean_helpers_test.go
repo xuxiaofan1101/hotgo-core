@@ -63,3 +63,39 @@ func TestProfileDataFieldsExtractsNestedPaths(t *testing.T) {
 		t.Fatalf("expected payload.risk.score number field, got %#v", fieldMap["payload.risk.score"])
 	}
 }
+
+func TestLimitDataCleanSamplePayloadsLimitsRowsBeforeFieldMerge(t *testing.T) {
+	payloads := []map[string]interface{}{
+		{"alpha": "a", "beta": "b", "gamma": "c"},
+		{"delta": "d"},
+	}
+
+	fields := profileDataFields(limitDataCleanSamplePayloads(payloads, 1), 4)
+
+	fieldMap := make(map[string]dataFieldProfile)
+	for _, field := range fields {
+		fieldMap[field.FieldPath] = field
+	}
+
+	if len(fieldMap) != 3 {
+		t.Fatalf("expected all fields from first sampled row only, got %#v", fieldMap)
+	}
+	if _, ok := fieldMap["delta"]; ok {
+		t.Fatalf("expected second row to be excluded by sample count, got %#v", fieldMap["delta"])
+	}
+}
+
+func TestAppendDataCleanSamplePayloadsStopsAtLimit(t *testing.T) {
+	payloads := appendDataCleanSamplePayloads(
+		[]map[string]interface{}{{"first": true}},
+		[]map[string]interface{}{{"second": true}, {"third": true}},
+		2,
+	)
+
+	if len(payloads) != 2 {
+		t.Fatalf("expected two sampled rows, got %#v", payloads)
+	}
+	if _, ok := payloads[1]["second"]; !ok {
+		t.Fatalf("expected second row to be kept before limit, got %#v", payloads[1])
+	}
+}

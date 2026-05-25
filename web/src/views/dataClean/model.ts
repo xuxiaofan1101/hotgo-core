@@ -26,7 +26,7 @@ export class State {
   public unknownFieldPolicy = 'selected_only';
   public cleanErrorPolicy = 'skip';
   public sinkConfig: Record<string, any> | null = null;
-  public status = 1;
+  public status = 2;
   public remark = '';
   public createdBy = 0;
   public createdBySumma?: null | MemberSumma = null;
@@ -93,14 +93,6 @@ export const schemas = ref<FormSchema[]>([
     },
   },
   {
-    field: 'eventType',
-    component: 'NInput',
-    label: '事件类型',
-    componentProps: {
-      placeholder: '如 nginx.access',
-    },
-  },
-  {
     field: 'status',
     component: 'NSelect',
     label: '状态',
@@ -152,12 +144,6 @@ export const columns = [
     render(row: State) {
       return renderOptionTag('DataConnectorTypeOptions', row.sourceType);
     },
-  },
-  {
-    title: '事件类型',
-    key: 'eventType',
-    align: 'left',
-    width: 160,
   },
   {
     title: '清洗',

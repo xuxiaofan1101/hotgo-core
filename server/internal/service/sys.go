@@ -200,6 +200,8 @@ type (
 		Status(ctx context.Context, in *sysin.DataConnectorStatusInp) (err error)
 		// Test 测试数据源配置
 		Test(ctx context.Context, in *sysin.DataConnectorTestInp) (res *sysin.DataConnectorTestModel, err error)
+		// KafkaTopics 获取Kafka Topic列表
+		KafkaTopics(ctx context.Context, in *sysin.DataConnectorKafkaTopicsInp) (res *sysin.DataConnectorKafkaTopicsModel, err error)
 	}
 	ISysDataClean interface {
 		// Model 数据清洗任务ORM模型

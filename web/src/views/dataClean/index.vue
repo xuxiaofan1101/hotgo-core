@@ -53,12 +53,12 @@
         </template>
       </BasicTable>
     </n-card>
-    <Edit ref="editRef" @reload-table="reloadTable" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { h, reactive, ref, computed, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
   import { useDialog, useMessage } from 'naive-ui';
   import { BasicTable, TableAction } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
@@ -68,15 +68,14 @@
   import { PlusOutlined, DeleteOutlined } from '@vicons/antd';
   import { columns, schemas, loadOptions, State } from './model';
   import { adaTableScrollX } from '@/utils/hotgo';
-  import Edit from './edit.vue';
 
   const dict = useDictStore();
   const dialog = useDialog();
   const message = useMessage();
+  const router = useRouter();
   const { hasPermission } = usePermission();
   const actionRef = ref();
   const searchFormRef = ref<any>({});
-  const editRef = ref();
   const checkedIds = ref([]);
 
   const actionColumn = reactive({
@@ -136,11 +135,11 @@
   }
 
   function addTable() {
-    editRef.value.openModal(null);
+    router.push({ name: 'dataCleanEditPage' });
   }
 
   function handleEdit(record: Recordable) {
-    editRef.value.openModal(record);
+    router.push({ name: 'dataCleanEditPage', query: { id: record.id } });
   }
 
   function handleDelete(record: Recordable) {

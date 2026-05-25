@@ -267,6 +267,31 @@ func parseDataCleanPayloads(raw string) ([]map[string]interface{}, error) {
 	return list, nil
 }
 
+func limitDataCleanSamplePayloads(payloads []map[string]interface{}, limit int) []map[string]interface{} {
+	if limit <= 0 || len(payloads) <= limit {
+		return payloads
+	}
+	return payloads[:limit]
+}
+
+func appendDataCleanSamplePayloads(target []map[string]interface{}, items []map[string]interface{}, limit int) []map[string]interface{} {
+	for _, item := range items {
+		if len(target) >= limit {
+			break
+		}
+		target = append(target, item)
+	}
+	return target
+}
+
+func mergeDataCleanSourceConfig(connectorConfig *gjson.Json, taskConfig *gjson.Json) map[string]interface{} {
+	merged := jsonToMap(connectorConfig)
+	for key, value := range jsonToMap(taskConfig) {
+		merged[key] = value
+	}
+	return merged
+}
+
 func dataCleanConfigString(config *gjson.Json, path string) string {
 	if config == nil {
 		return ""

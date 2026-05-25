@@ -331,6 +331,7 @@ items[1].price -> items[].price
 ```
 
 - 限制最大展开深度，例如 8 层。
+- 主动采样时同时限制采样条数和采样超时时间，例如最多 50 条、最长 60 秒，任一条件先到达就停止采样，然后合并字段集合。
 - 限制单条数据最多提取字段数，例如 500 个。
 - 限制单个任务最多字段数，例如 5000 或 10000 个，超过后停止新增并告警。
 - 限制字段路径长度，例如 512 字符。
@@ -343,6 +344,8 @@ items[1].price -> items[].price
 ```json
 {
   "fieldDiscovery": {
+    "sampleLimit": 50,
+    "sampleTimeoutSeconds": 60,
     "maxDepth": 8,
     "maxFieldsPerRecord": 500,
     "maxFieldsPerTask": 10000,

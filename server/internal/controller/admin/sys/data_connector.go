@@ -75,3 +75,15 @@ func (c *cDataConnector) Test(ctx context.Context, req *dataconnector.TestReq) (
 	res.DataConnectorTestModel = data
 	return
 }
+
+// KafkaTopics 获取Kafka Topic列表
+func (c *cDataConnector) KafkaTopics(ctx context.Context, req *dataconnector.KafkaTopicsReq) (res *dataconnector.KafkaTopicsRes, err error) {
+	data, err := service.SysDataConnector().KafkaTopics(ctx, &req.DataConnectorKafkaTopicsInp)
+	if err != nil {
+		return
+	}
+
+	res = new(dataconnector.KafkaTopicsRes)
+	res.DataConnectorKafkaTopicsModel = data
+	return
+}

@@ -34,6 +34,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.1200
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.66
 	github.com/ufilesdk-dev/ufile-gosdk v1.0.6
+	github.com/xdg-go/scram v1.1.2
 	github.com/xuri/excelize/v2 v2.9.1
 	github.com/xuxiaofan1101/agollo/v4 v4.4.1
 	go.opentelemetry.io/otel v1.37.0
@@ -141,6 +142,8 @@ require (
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
+	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
+	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect

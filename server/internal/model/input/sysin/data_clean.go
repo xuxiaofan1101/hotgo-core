@@ -79,7 +79,7 @@ func (in *DataCleanTaskEditInp) Filter(ctx context.Context) (err error) {
 		in.CleanErrorPolicy = consts.DataCleanErrorPolicySkip
 	}
 	if in.Status <= 0 {
-		in.Status = consts.StatusEnabled
+		in.Status = consts.StatusDisable
 	}
 	if !validate.InSlice(consts.StatusSlice, in.Status) {
 		return gerror.New("状态不正确")
@@ -202,12 +202,13 @@ type DataCleanTaskTestModel struct {
 }
 
 type DataCleanTaskSampleInp struct {
-	Id           int64       `json:"id"           dc:"清洗任务ID"`
-	SourceId     int64       `json:"sourceId"     dc:"输入连接ID"`
-	SourceConfig *gjson.Json `json:"sourceConfig" dc:"输入配置"`
-	CleanConfig  *gjson.Json `json:"cleanConfig"  dc:"清洗配置"`
-	Payload      string      `json:"payload"      dc:"样例数据"`
-	Limit        int         `json:"limit"        dc:"采样数量"`
+	Id             int64       `json:"id"           dc:"清洗任务ID"`
+	SourceId       int64       `json:"sourceId"     dc:"输入连接ID"`
+	SourceConfig   *gjson.Json `json:"sourceConfig" dc:"输入配置"`
+	CleanConfig    *gjson.Json `json:"cleanConfig"  dc:"清洗配置"`
+	Payload        string      `json:"payload"      dc:"样例数据"`
+	Limit          int         `json:"limit"        dc:"采样数量"`
+	TimeoutSeconds int         `json:"timeoutSeconds" dc:"采样超时秒数"`
 }
 
 func (in *DataCleanTaskSampleInp) Filter(ctx context.Context) (err error) {
@@ -219,6 +220,12 @@ func (in *DataCleanTaskSampleInp) Filter(ctx context.Context) (err error) {
 	}
 	if in.Limit > 500 {
 		in.Limit = 500
+	}
+	if in.TimeoutSeconds <= 0 {
+		in.TimeoutSeconds = 10
+	}
+	if in.TimeoutSeconds > 60 {
+		in.TimeoutSeconds = 60
 	}
 	return nil
 }

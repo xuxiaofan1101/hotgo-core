@@ -54,6 +54,13 @@ docker compose up -d
 
 访问 `http://localhost:18080`。如果要连接其他认证方式的 Kafka，需要同步调整 `kafka-ui/docker-compose.yaml` 里的外部网络、`KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS` 和认证属性。
 
+本地发送测试数据：
+
+```bash
+cd agent
+go run ./cmd/kafka-producer -topic hotgo-test-events -count 3
+```
+
 SCRAM 说明：`sasl-scram-sha-256` 和 `sasl-scram-sha-512` 使用 ZooKeeper 模式启动，并在 broker 启动前写入 SCRAM 用户凭据，避免 KRaft 本地初始化 SCRAM 用户不完整导致认证失败。
 
 OAuth 说明：`oauthbearer` 使用 Kafka 自带的 unsecured OAuthBearer callback handler，只适合本地开发验证，不用于生产。

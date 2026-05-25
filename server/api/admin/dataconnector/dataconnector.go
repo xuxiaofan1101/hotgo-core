@@ -65,3 +65,13 @@ type TestReq struct {
 type TestRes struct {
 	*sysin.DataConnectorTestModel
 }
+
+// KafkaTopicsReq 获取Kafka Topic列表
+type KafkaTopicsReq struct {
+	g.Meta `path:"/dataConnector/kafkaTopics" method:"get" tags:"数据源" summary:"获取Kafka Topic列表"`
+	sysin.DataConnectorKafkaTopicsInp
+}
+
+type KafkaTopicsRes struct {
+	*sysin.DataConnectorKafkaTopicsModel
+}
