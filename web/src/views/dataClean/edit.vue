@@ -416,64 +416,62 @@
                       />
                     </div>
                   </div>
-                  <template v-for="(field, index) in fieldRows" :key="field.key">
+                  <template v-for="field in fieldRows" :key="field.key">
                     <div
                       class="data-clean-field-row"
                       :style="{ gridTemplateColumns: fieldColumnTemplate }"
                     >
-                      <div class="data-clean-field-original">
+                      <div class="data-clean-field-cell data-clean-field-switch-cell">
+                        <n-switch v-model:value="field.enabled" />
+                      </div>
+                      <div class="data-clean-field-original" :title="field.fieldPath">
                         <n-input
+                          v-if="field.pathEditable"
                           v-model:value="field.fieldPath"
                           placeholder="message.level"
                           :bordered="false"
                         />
+                        <span v-else>{{ field.fieldPath || '未命名字段' }}</span>
                       </div>
-                      <n-select v-model:value="field.fieldType" :options="fieldTypeOptions" />
-                      <n-switch v-model:value="field.enabled" />
-                      <n-input v-model:value="field.fieldName" />
-                      <n-select
-                        v-model:value="field.action"
-                        :options="cleanActionOptions"
-                        clearable
-                        placeholder="清洗功能"
-                      />
+                      <div class="data-clean-field-cell">
+                        <n-select v-model:value="field.fieldType" :options="fieldTypeOptions" />
+                      </div>
+                      <div class="data-clean-field-cell">
+                        <n-input v-model:value="field.fieldName" />
+                      </div>
+                      <div class="data-clean-field-cell data-clean-field-action-cell">
+                        <n-select
+                          v-model:value="field.actions"
+                          class="data-clean-action-select"
+                          :options="cleanActionOptions"
+                          clearable
+                          multiple
+                          placeholder="清洗功能"
+                        />
+                      </div>
                       <div
                         class="data-clean-field-params"
                         :class="{
-                          'data-clean-field-params-double': field.action === 'regex_replace',
+                          'data-clean-field-params-multi': countFieldParams(field) > 1,
                         }"
                       >
                         <n-input
-                          v-if="field.action === 'rename'"
+                          v-if="hasFieldAction(field, 'rename')"
                           v-model:value="field.targetField"
                           placeholder="目标字段"
                         />
                         <n-input
-                          v-else-if="field.action === 'default' || field.action === 'set_field'"
+                          v-if="
+                            hasFieldAction(field, 'default') || hasFieldAction(field, 'set_field')
+                          "
                           v-model:value="field.defaultValue"
                           placeholder="字段值"
                         />
-                        <template v-else-if="field.action === 'regex_replace'">
+                        <template v-if="hasFieldAction(field, 'regex_replace')">
                           <n-input v-model:value="field.pattern" placeholder="正则" />
                           <n-input v-model:value="field.replacement" placeholder="替换为" />
                         </template>
                       </div>
-                      <n-button size="small" type="error" @click="removeFieldRow(index)">
-                        <template #icon>
-                          <n-icon><DeleteOutlined /></n-icon>
-                        </template>
-                      </n-button>
-                    </div>
-                    <div v-if="field.sampleValues.length > 0" class="data-clean-field-samples">
-                      <span>样例：</span>
-                      <n-tag
-                        v-for="sample in field.sampleValues"
-                        :key="sample"
-                        size="small"
-                        class="data-clean-sample-tag"
-                      >
-                        {{ sample }}
-                      </n-tag>
                     </div>
                   </template>
                 </div>
@@ -740,7 +738,7 @@
     fieldName: string;
     fieldType: string;
     enabled: boolean;
-    action: string | null;
+    actions: string[];
     targetField: string;
     defaultValue: string;
     pattern: string;
@@ -749,6 +747,7 @@
     description: string;
     sampleValues: string[];
     source: FieldSource;
+    pathEditable: boolean;
   }
 
   interface FilterCondition {
@@ -799,18 +798,17 @@
   const fieldRows = ref<FieldRow[]>([]);
   const filterGroups = ref<FilterGroup[]>([]);
   const dispatchTargets = ref<DispatchTarget[]>([]);
-  const fieldColumnWidths = ref([360, 130, 76, 300, 170, 430, 54]);
+  const fieldColumnWidths = ref([80, 320, 140, 300, 340, 340]);
 
   const fieldColumns = [
+    { key: 'enabled', title: '启用', resizable: true },
     { key: 'fieldPath', title: '原始字段', resizable: true },
     { key: 'fieldType', title: '字段类型', resizable: true },
-    { key: 'enabled', title: '启用', resizable: true },
-    { key: 'fieldName', title: '字段名称', resizable: true },
+    { key: 'fieldName', title: '输出名称', resizable: true },
     { key: 'action', title: '清洗功能', resizable: true },
     { key: 'params', title: '参数', resizable: true },
-    { key: 'operation', title: '', resizable: false },
   ];
-  const fieldColumnMinWidths = [180, 96, 64, 180, 112, 220, 42];
+  const fieldColumnMinWidths = [72, 220, 120, 220, 240, 260];
 
   let resizingFieldColumn: {
     index: number;
@@ -955,6 +953,16 @@
     return parts[parts.length - 1] || normalized;
   }
 
+  function normalizeCleanActions(value: any): string[] {
+    if (!value) {
+      return [];
+    }
+    if (Array.isArray(value)) {
+      return value.map((item) => String(item || '').trim()).filter(Boolean);
+    }
+    return [String(value).trim()].filter(Boolean);
+  }
+
   function newFieldRow(raw: Record<string, any> = {}, source: FieldSource = 'manual'): FieldRow {
     const fieldPath = raw.fieldPath ?? raw.path ?? raw.name ?? '';
     return {
@@ -963,7 +971,7 @@
       fieldName: raw.fieldName ?? raw.title ?? fieldNameFromPath(fieldPath),
       fieldType: raw.fieldType ?? raw.type ?? 'string',
       enabled: raw.enabled ?? true,
-      action: raw.action ?? null,
+      actions: normalizeCleanActions(raw.actions ?? raw.action),
       targetField: raw.targetField ?? raw.to ?? '',
       defaultValue: raw.defaultValue ?? raw.value ?? '',
       pattern: raw.pattern ?? '',
@@ -972,19 +980,34 @@
       description: raw.description ?? '',
       sampleValues: normalizeSampleValues(raw.sampleValues ?? raw.sampleValue),
       source,
+      pathEditable: Boolean(raw.pathEditable),
     };
   }
 
-  function addFieldRow(raw: Record<string, any> = {}, source: FieldSource = 'manual') {
-    fieldRows.value.push(newFieldRow(raw, source));
+  function hasFieldAction(field: FieldRow, action: string) {
+    return field.actions.includes(action);
   }
 
-  function removeFieldRow(index: number) {
-    fieldRows.value.splice(index, 1);
+  function countFieldParams(field: FieldRow) {
+    let count = 0;
+    if (hasFieldAction(field, 'rename')) {
+      count += 1;
+    }
+    if (hasFieldAction(field, 'default') || hasFieldAction(field, 'set_field')) {
+      count += 1;
+    }
+    if (hasFieldAction(field, 'regex_replace')) {
+      count += 2;
+    }
+    return count;
+  }
+
+  function addFieldRow(raw: Record<string, any> = {}, source: FieldSource = 'manual') {
+    fieldRows.value.push(newFieldRow({ ...raw, pathEditable: raw.pathEditable ?? true }, source));
   }
 
   function startResizeFieldColumn(index: number, event: MouseEvent) {
-    if (index >= fieldColumnWidths.value.length - 1) {
+    if (!fieldColumns[index]?.resizable) {
       return;
     }
     resizingFieldColumn = {
@@ -1371,19 +1394,19 @@
     };
   }
 
-  function fieldRowToStep(field: FieldRow) {
+  function fieldRowToStep(field: FieldRow, action: string) {
     const step: Record<string, any> = {
       enabled: field.enabled,
       field: field.fieldPath,
-      type: field.action,
+      type: action,
     };
-    if (field.action === 'rename') {
+    if (action === 'rename') {
       step.to = field.targetField;
     }
-    if (field.action === 'default' || field.action === 'set_field') {
+    if (action === 'default' || action === 'set_field') {
       step.value = field.defaultValue;
     }
-    if (field.action === 'regex_replace') {
+    if (action === 'regex_replace') {
       step.pattern = field.pattern;
       step.replacement = field.replacement;
     }
@@ -1394,7 +1417,8 @@
     const fields = fieldRows.value
       .filter((field) => field.fieldPath)
       .map((field) => ({
-        action: field.action,
+        action: field.actions[0] ?? null,
+        actions: field.actions,
         defaultValue: field.defaultValue,
         description: field.description,
         enabled: field.enabled,
@@ -1412,8 +1436,8 @@
       filter: buildFilterConfig(),
       parseDepth: cleanRuleForm.parseDepth,
       steps: fieldRows.value
-        .filter((field) => field.enabled && field.action)
-        .map((field) => fieldRowToStep(field)),
+        .filter((field) => field.enabled && field.actions.length > 0)
+        .flatMap((field) => field.actions.map((action) => fieldRowToStep(field, action))),
     };
   }
 
@@ -1440,7 +1464,7 @@
 
   function hasCleanRules() {
     if (cleanRuleForm.filterEnabled) return true;
-    return fieldRows.value.some((field) => field.enabled && Boolean(field.action));
+    return fieldRows.value.some((field) => field.enabled && field.actions.length > 0);
   }
 
   function validateSourceConfig() {
@@ -1905,7 +1929,7 @@
     background: rgba(128, 128, 128, 0.08);
     color: var(--text-color-2);
     font-weight: 600;
-    min-height: 42px;
+    min-height: 44px;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -1913,8 +1937,14 @@
 
   .data-clean-field-th,
   .data-clean-field-row > * {
+    box-sizing: border-box;
     min-width: 0;
-    padding: 8px 10px;
+    padding: 10px 14px;
+  }
+
+  .data-clean-field-th + .data-clean-field-th,
+  .data-clean-field-row > * + * {
+    border-left: 1px solid rgba(128, 128, 128, 0.16);
   }
 
   .data-clean-field-th {
@@ -1949,19 +1979,32 @@
 
   .data-clean-field-row {
     border-top: 1px solid rgba(128, 128, 128, 0.16);
-    min-height: 58px;
+    min-height: 66px;
   }
 
   .data-clean-field-row:hover {
     background: rgba(128, 128, 128, 0.04);
   }
 
-  .data-clean-field-row > .n-switch {
-    justify-self: start;
+  .data-clean-field-cell {
+    align-items: center;
+    display: flex;
+  }
+
+  .data-clean-field-switch-cell {
+    justify-content: flex-start;
+  }
+
+  .data-clean-field-action-cell {
+    align-items: stretch;
   }
 
   .data-clean-field-original {
+    color: var(--text-color-1);
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   :deep(.data-clean-field-original .n-input__input-el) {
@@ -1975,22 +2018,26 @@
     min-height: 34px;
   }
 
-  .data-clean-field-params-double {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  .data-clean-field-params-multi {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 
-  .data-clean-field-samples {
-    align-items: center;
-    border-top: 1px solid rgba(128, 128, 128, 0.12);
-    color: var(--text-color-2);
-    display: flex;
+  :deep(.data-clean-field-row .n-base-selection),
+  :deep(.data-clean-field-row .n-input) {
+    --n-height: 36px;
+    width: 100%;
+  }
+
+  :deep(.data-clean-action-select .n-base-selection) {
+    height: auto;
+    min-height: 36px;
+  }
+
+  :deep(.data-clean-action-select .n-base-selection-tags) {
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px 10px 8px 18px;
-  }
-
-  .data-clean-sample-tag {
-    max-width: 320px;
+    padding-bottom: 3px;
+    padding-top: 3px;
   }
 
   .data-clean-sample-actions {
