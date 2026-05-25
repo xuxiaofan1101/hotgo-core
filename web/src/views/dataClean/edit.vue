@@ -439,38 +439,20 @@
                       <div class="data-clean-field-cell">
                         <n-input v-model:value="field.fieldName" />
                       </div>
-                      <div class="data-clean-field-cell data-clean-field-action-cell">
-                        <n-select
-                          v-model:value="field.actions"
-                          class="data-clean-action-select"
-                          :options="cleanActionOptions"
-                          clearable
-                          multiple
-                          placeholder="清洗功能"
-                        />
-                      </div>
-                      <div
-                        class="data-clean-field-params"
-                        :class="{
-                          'data-clean-field-params-multi': countFieldParams(field) > 1,
-                        }"
-                      >
-                        <n-input
-                          v-if="hasFieldAction(field, 'rename')"
-                          v-model:value="field.targetField"
-                          placeholder="目标字段"
-                        />
-                        <n-input
-                          v-if="
-                            hasFieldAction(field, 'default') || hasFieldAction(field, 'set_field')
-                          "
-                          v-model:value="field.defaultValue"
-                          placeholder="字段值"
-                        />
-                        <template v-if="hasFieldAction(field, 'regex_replace')">
-                          <n-input v-model:value="field.pattern" placeholder="正则" />
-                          <n-input v-model:value="field.replacement" placeholder="替换为" />
-                        </template>
+                      <div class="data-clean-field-config">
+                        <n-button size="small" secondary @click="openFieldConfigDrawer(field)">
+                          <template #icon>
+                            <n-icon><SettingOutlined /></n-icon>
+                          </template>
+                          配置
+                        </n-button>
+                        <n-tag
+                          v-if="hasFieldConfigMissingParams(field)"
+                          size="small"
+                          type="warning"
+                        >
+                          缺少参数
+                        </n-tag>
                       </div>
                     </div>
                   </template>
@@ -681,7 +663,7 @@
         </n-form>
         <div class="data-clean-page-actions">
           <n-space>
-            <n-button v-if="currentStep > 1" @click="currentStep--">上一步</n-button>
+            <n-button v-if="currentStep > 1" @click="handlePrevStep">上一步</n-button>
             <n-button v-if="currentStep < 3" type="primary" @click="handleNextStep"
               >下一步</n-button
             >
@@ -692,14 +674,80 @@
         </div>
       </n-spin>
     </n-card>
+    <n-drawer
+      v-model:show="fieldConfigDrawerVisible"
+      placement="right"
+      :width="fieldConfigDrawerWidth"
+    >
+      <n-drawer-content title="清洗配置" closable>
+        <template v-if="activeField">
+          <n-form label-placement="top" class="data-clean-drawer-form">
+            <n-form-item label="清洗功能">
+              <n-select
+                v-model:value="activeField.actions"
+                :options="cleanActionOptions"
+                clearable
+                multiple
+                placeholder="请选择清洗功能"
+              />
+            </n-form-item>
+          </n-form>
+
+          <div class="data-clean-drawer-section-title">参数配置</div>
+          <n-empty
+            v-if="activeField.actions.length === 0"
+            size="small"
+            description="暂无清洗功能"
+          />
+          <div v-else class="data-clean-drawer-steps">
+            <div
+              v-for="(action, actionIndex) in activeField.actions"
+              :key="`${activeField.key}-${action}`"
+              class="data-clean-drawer-step"
+            >
+              <div class="data-clean-drawer-step-head">
+                <n-tag size="small" round>{{ actionIndex + 1 }}</n-tag>
+                <span>{{ getCleanActionLabel(action) }}</span>
+                <n-tag
+                  v-if="isFieldActionParamMissing(activeField, action)"
+                  size="small"
+                  type="warning"
+                >
+                  缺少参数
+                </n-tag>
+              </div>
+              <n-form label-placement="top" class="data-clean-drawer-step-form">
+                <n-form-item v-if="action === 'rename'" label="目标字段">
+                  <n-input v-model:value="activeField.targetField" placeholder="目标字段" />
+                </n-form-item>
+                <n-form-item v-if="action === 'default' || action === 'set_field'" label="字段值">
+                  <n-input v-model:value="activeField.defaultValue" placeholder="字段值" />
+                </n-form-item>
+                <template v-if="action === 'regex_replace'">
+                  <n-form-item label="正则表达式">
+                    <n-input v-model:value="activeField.pattern" placeholder="正则表达式" />
+                  </n-form-item>
+                  <n-form-item label="替换为">
+                    <n-input v-model:value="activeField.replacement" placeholder="替换为" />
+                  </n-form-item>
+                </template>
+                <div v-if="!fieldActionNeedsParams(action)" class="data-clean-drawer-no-params">
+                  无需参数
+                </div>
+              </n-form>
+            </div>
+          </div>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import { PlusOutlined, DeleteOutlined } from '@vicons/antd';
-  import { useMessage } from 'naive-ui';
+  import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+  import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+  import { PlusOutlined, DeleteOutlined, SettingOutlined } from '@vicons/antd';
+  import { useDialog, useMessage } from 'naive-ui';
   import { useDictStore } from '@/store/modules/dict';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useTabsViewStore } from '@/store/modules/tabsView';
@@ -773,6 +821,7 @@
   }
 
   const message = useMessage();
+  const dialog = useDialog();
   const dict = useDictStore();
   const route = useRoute();
   const router = useRouter();
@@ -798,17 +847,19 @@
   const fieldRows = ref<FieldRow[]>([]);
   const filterGroups = ref<FilterGroup[]>([]);
   const dispatchTargets = ref<DispatchTarget[]>([]);
-  const fieldColumnWidths = ref([80, 320, 140, 300, 340, 340]);
+  const fieldConfigDrawerVisible = ref(false);
+  const activeFieldKey = ref<number | null>(null);
+  const allowRouteLeave = ref(false);
+  const fieldColumnWidths = ref([80, 360, 140, 300, 300]);
 
   const fieldColumns = [
     { key: 'enabled', title: '启用', resizable: true },
     { key: 'fieldPath', title: '原始字段', resizable: true },
     { key: 'fieldType', title: '字段类型', resizable: true },
     { key: 'fieldName', title: '输出名称', resizable: true },
-    { key: 'action', title: '清洗功能', resizable: true },
-    { key: 'params', title: '参数', resizable: true },
+    { key: 'action', title: '清洗配置', resizable: true },
   ];
-  const fieldColumnMinWidths = [72, 220, 120, 220, 240, 260];
+  const fieldColumnMinWidths = [72, 220, 120, 220, 220];
 
   let resizingFieldColumn: {
     index: number;
@@ -822,8 +873,16 @@
     return formValue.value.id > 0 ? `编辑数据清洗 #${formValue.value.id}` : '新增数据清洗';
   });
   const fieldColumnTemplate = computed(() =>
-    fieldColumnWidths.value.map((width) => `${width}px`).join(' ')
+    fieldColumnWidths.value
+      .map((width, index) =>
+        index === fieldColumnWidths.value.length - 1 ? `minmax(${width}px, 1fr)` : `${width}px`
+      )
+      .join(' ')
   );
+  const fieldConfigDrawerWidth = computed(() => (settingStore.isMobile ? '100%' : 560));
+  const activeField = computed(() => {
+    return fieldRows.value.find((item) => item.key === activeFieldKey.value) || null;
+  });
   const selectedSource = computed(() => {
     return sourceOptions.value.find(
       (item) => Number(item.value) === Number(formValue.value.sourceId)
@@ -984,22 +1043,58 @@
     };
   }
 
-  function hasFieldAction(field: FieldRow, action: string) {
-    return field.actions.includes(action);
+  function getOptionLabel(options: SelectOption[], value: string) {
+    return String(options.find((item) => String(item.value) === value)?.label || value || '-');
   }
 
-  function countFieldParams(field: FieldRow) {
-    let count = 0;
-    if (hasFieldAction(field, 'rename')) {
-      count += 1;
+  function getCleanActionLabel(action: string) {
+    return getOptionLabel(cleanActionOptions.value, action);
+  }
+
+  function fieldActionNeedsParams(action: string) {
+    return ['rename', 'default', 'set_field', 'regex_replace'].includes(action);
+  }
+
+  function isFieldActionParamMissing(field: FieldRow, action: string) {
+    if (action === 'rename') {
+      return !String(field.targetField || '').trim();
     }
-    if (hasFieldAction(field, 'default') || hasFieldAction(field, 'set_field')) {
-      count += 1;
+    if (action === 'default' || action === 'set_field') {
+      return !String(field.defaultValue || '').trim();
     }
-    if (hasFieldAction(field, 'regex_replace')) {
-      count += 2;
+    if (action === 'regex_replace') {
+      return !String(field.pattern || '').trim();
     }
-    return count;
+    return false;
+  }
+
+  function hasFieldConfigMissingParams(field: FieldRow) {
+    return (
+      field.enabled && field.actions.some((action) => isFieldActionParamMissing(field, action))
+    );
+  }
+
+  function getMissingParamFields() {
+    return fieldRows.value.filter((field) => hasFieldConfigMissingParams(field));
+  }
+
+  function validateFieldConfigParams() {
+    const missingFields = getMissingParamFields();
+    if (missingFields.length === 0) {
+      return true;
+    }
+    const firstField = missingFields[0];
+    activeFieldKey.value = firstField.key;
+    fieldConfigDrawerVisible.value = true;
+    message.error(
+      `字段「${firstField.fieldPath || firstField.fieldName || '未命名字段'}」清洗配置缺少参数`
+    );
+    return false;
+  }
+
+  function openFieldConfigDrawer(field: FieldRow) {
+    activeFieldKey.value = field.key;
+    fieldConfigDrawerVisible.value = true;
   }
 
   function addFieldRow(raw: Record<string, any> = {}, source: FieldSource = 'manual') {
@@ -1509,7 +1604,17 @@
     return true;
   }
 
+  function handlePrevStep() {
+    if (!validateFieldConfigParams()) {
+      return;
+    }
+    currentStep.value--;
+  }
+
   function handleNextStep() {
+    if (!validateFieldConfigParams()) {
+      return;
+    }
     if (currentStep.value === 1 && !validateSourceConfig()) {
       return;
     }
@@ -1607,6 +1712,9 @@
         message.error('请填写完整信息');
         return;
       }
+      if (!validateFieldConfigParams()) {
+        return;
+      }
       if (!validateSourceConfig() || !validateSinkConfig()) {
         return;
       }
@@ -1632,7 +1740,10 @@
 
   async function closeForm() {
     const currentFullPath = route.fullPath;
-    await router.push({ name: 'dataClean' });
+    const navigationFailure = await router.push({ name: 'dataClean' });
+    if (navigationFailure) {
+      return;
+    }
     await nextTick();
     closeTabByFullPath(currentFullPath);
   }
@@ -1683,6 +1794,32 @@
     }
   }
 
+  function confirmLeaveWithMissingParams() {
+    if (getMissingParamFields().length === 0) {
+      return Promise.resolve(true);
+    }
+    return new Promise<boolean>((resolve) => {
+      dialog.warning({
+        title: '确认离开',
+        content: '当前清洗配置存在缺少参数的字段，离开后不会保存这些未完成配置，确认离开吗？',
+        positiveText: '确认离开',
+        negativeText: '留在当前页',
+        closable: false,
+        maskClosable: false,
+        onPositiveClick: () => resolve(true),
+        onNegativeClick: () => resolve(false),
+      });
+    });
+  }
+
+  function handleBeforeUnload(event: BeforeUnloadEvent) {
+    if (getMissingParamFields().length === 0) {
+      return;
+    }
+    event.preventDefault();
+    event.returnValue = '当前清洗配置存在缺少参数的字段，确认离开吗？';
+  }
+
   function loadPage() {
     const id = Number(route.query.id) || 0;
     loading.value = true;
@@ -1721,8 +1858,24 @@
     { immediate: true }
   );
 
+  onBeforeRouteLeave(async () => {
+    if (allowRouteLeave.value) {
+      return true;
+    }
+    const canLeave = await confirmLeaveWithMissingParams();
+    if (canLeave) {
+      allowRouteLeave.value = true;
+    }
+    return canLeave;
+  });
+
+  onMounted(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  });
+
   onBeforeUnmount(() => {
     stopResizeFieldColumn();
+    window.removeEventListener('beforeunload', handleBeforeUnload);
   });
 </script>
 
@@ -1995,10 +2148,6 @@
     justify-content: flex-start;
   }
 
-  .data-clean-field-action-cell {
-    align-items: stretch;
-  }
-
   .data-clean-field-original {
     color: var(--text-color-1);
     font-weight: 600;
@@ -2011,15 +2160,12 @@
     font-weight: 600;
   }
 
-  .data-clean-field-params {
+  .data-clean-field-config {
+    align-items: center;
     column-gap: 8px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    justify-content: flex-start;
     min-height: 34px;
-  }
-
-  .data-clean-field-params-multi {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 
   :deep(.data-clean-field-row .n-base-selection),
@@ -2028,16 +2174,42 @@
     width: 100%;
   }
 
-  :deep(.data-clean-action-select .n-base-selection) {
-    height: auto;
-    min-height: 36px;
+  .data-clean-drawer-form {
+    margin-bottom: 16px;
   }
 
-  :deep(.data-clean-action-select .n-base-selection-tags) {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    padding-bottom: 3px;
-    padding-top: 3px;
+  .data-clean-drawer-section-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .data-clean-drawer-steps {
+    display: grid;
+    gap: 12px;
+  }
+
+  .data-clean-drawer-step {
+    border: 1px solid rgba(128, 128, 128, 0.18);
+    border-radius: 6px;
+    padding: 12px;
+  }
+
+  .data-clean-drawer-step-head {
+    align-items: center;
+    column-gap: 8px;
+    display: flex;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .data-clean-drawer-step-form {
+    margin-bottom: -18px;
+  }
+
+  .data-clean-drawer-no-params {
+    color: var(--text-color-3);
+    font-size: 13px;
+    padding-bottom: 18px;
   }
 
   .data-clean-sample-actions {
