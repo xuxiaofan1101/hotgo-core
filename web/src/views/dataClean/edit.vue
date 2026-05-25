@@ -1706,7 +1706,7 @@
   .data-clean-page-card {
     --data-clean-content-width: 980px;
     --data-clean-form-label-width: 120px;
-    --data-clean-steps-width: 1700px;
+    --data-clean-steps-width: calc(var(--data-clean-content-width) + 32px);
     min-height: calc(100vh - 180px);
   }
 
@@ -1725,9 +1725,14 @@
   }
 
   .data-clean-steps {
+    box-sizing: border-box;
     margin: 0 auto 24px;
     max-width: 100%;
     width: var(--data-clean-steps-width);
+  }
+
+  :deep(.data-clean-steps > .n-step:last-child) {
+    flex: 0 0 auto;
   }
 
   .data-clean-pane {
