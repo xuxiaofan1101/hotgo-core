@@ -377,7 +377,7 @@
               </div>
             </div>
 
-            <div class="data-clean-section">
+            <div class="data-clean-section data-clean-field-section">
               <div class="data-clean-toolbar">
                 <div class="data-clean-section-title">字段清洗</div>
                 <n-space>
@@ -799,7 +799,7 @@
   const fieldRows = ref<FieldRow[]>([]);
   const filterGroups = ref<FilterGroup[]>([]);
   const dispatchTargets = ref<DispatchTarget[]>([]);
-  const fieldColumnWidths = ref([300, 120, 72, 260, 140, 320, 48]);
+  const fieldColumnWidths = ref([360, 130, 76, 300, 170, 430, 54]);
 
   const fieldColumns = [
     { key: 'fieldPath', title: '原始字段', resizable: true },
@@ -1705,6 +1705,7 @@
 <style lang="less" scoped>
   .data-clean-page-card {
     --data-clean-content-width: 980px;
+    --data-clean-field-section-width: 1560px;
     --data-clean-form-label-width: 120px;
     --data-clean-steps-width: calc(var(--data-clean-content-width) + 32px);
     min-height: calc(100vh - 180px);
@@ -1818,6 +1819,11 @@
     margin-right: auto;
     max-width: 100%;
     width: 100%;
+  }
+
+  .data-clean-field-section {
+    max-width: var(--data-clean-field-section-width);
+    width: min(100%, var(--data-clean-field-section-width));
   }
 
   .data-clean-wide-form-item {
